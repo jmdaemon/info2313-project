@@ -4,6 +4,7 @@
 
 plugins {
     id 'project2.java-application-conventions'
+    id 'org.openjfx.javafxplugin' version '0.1.0'
 }
 
 dependencies {
@@ -12,11 +13,19 @@ dependencies {
     implementation project(':data')
 }
 
-application {
+// application {
     // Define the main class for the application.
-    mainClass = 'plant.App'
+    // mainClass = 'ui.GUI'
+// }
+
+// run {
+//     standardInput = System.in
+// }
+
+javafx {
+    // version = "21"
+    version = "17.0.8"
+    modules = [ 'javafx.controls', 'javafx.fxml' ]
 }
 
-run {
-    standardInput = System.in
-}
+mainClassName = 'GUI'
