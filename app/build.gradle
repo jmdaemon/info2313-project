@@ -14,7 +14,7 @@ dependencies {
 
 application {
     // Define the main class for the application.
-    mainClass = 'project2.app.App'
+    mainClass = 'plant.App'
 }
 
 run {
