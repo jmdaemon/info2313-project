@@ -8,8 +8,6 @@ enum Season
 
 public interface IPlant 
 {
-    Season GetSeason();
-
     void Stake();
     void Prune();
     void Fertilize();

@@ -8,12 +8,6 @@ public abstract class Plant implements IPlant
     }
 
     @Override
-    public Season GetSeason() 
-    {
-        return info.pottingTime;
-    }
-
-    @Override
     public void Fertilize() 
     {
         System.out.println("Using fertilizer on " + info.name);
