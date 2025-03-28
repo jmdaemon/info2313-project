@@ -1,22 +1,14 @@
 package plant;
 
 import java.io.File;
-import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 import java.util.function.Predicate;
 
+import data.Data;
 import utils.Library;
 
 public class PlantManager {
-  public static short ERROR_FAILURE = 1;
-  public static String WARN_FILE_OVERWRITE = "Warning: File already exists and will be overwritten.";
-
-  public static String ERROR_FILE_NEXIST = "Error: File does not exist.";
-  public static String ERROR_FILE_WRITE = "Error: File could not be written to.";
-  public static String ERROR_FILE_READ = "Error: File could not be read from.";
-
   private List<Plant> plants;
 
   public List<Plant> getPlants() { return this.plants; }
@@ -50,8 +42,8 @@ public class PlantManager {
     if (data.exists()) {
       // TODO: Check if the user wants to overwrite the data in the file
       // For now we just error out
-      System.out.println(WARN_FILE_OVERWRITE);
-      System.exit(ERROR_FAILURE);
+      System.out.println(Data.WARN_FILE_OVERWRITE);
+      System.exit(Data.ERROR_FAILURE);
     } else {
       // If the file does not exist yet, create the file
       // data.createNewFile();
@@ -62,7 +54,7 @@ public class PlantManager {
     // Save data to disk
     // write(fp);
     String[] lines = new String[5];
-    Library.write_buf(fp, lines, ERROR_FILE_WRITE);
+    Library.write_buf(fp, lines, Data.ERROR_FILE_WRITE);
   }
 
   // Read plants from disk to list
@@ -70,8 +62,8 @@ public class PlantManager {
   public void read(String fp) {
     File data = new File(fp);
     if (!data.exists()) {
-      System.out.println(ERROR_FILE_NEXIST);
-      System.exit(ERROR_FAILURE);
+      System.out.println(Data.ERROR_FILE_NEXIST);
+      System.exit(Data.ERROR_FAILURE);
     }
 
     // TODO: Read plant data from disk into memory
@@ -91,7 +83,7 @@ public class PlantManager {
     List<Plant> loaded = new ArrayList<Plant>();
 
     // Read data to memory
-    List<String> lines = Library.read_buf(fp, ERROR_FILE_READ);
+    List<String> lines = Library.read_buf(fp, Data.ERROR_FILE_READ);
 
     // Parse data
     for (String line : lines) {
