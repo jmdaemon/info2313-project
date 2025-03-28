@@ -1,3 +1,5 @@
+package plant;
+
 public class Tree extends Plant 
 {
     protected int height;

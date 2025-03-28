@@ -1,10 +1,4 @@
-enum Season 
-{
-    SUMMER, 
-    SPRING,
-    WINTER,
-    FALL;
-}
+package plant;
 
 public interface IPlant 
 {

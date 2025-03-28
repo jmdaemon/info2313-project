@@ -1,3 +1,5 @@
+package plant;
+
 public class Creepers extends Plant 
 {
     String color;

@@ -1,3 +1,5 @@
+package plant;
+
 public class Herb extends Plant 
 {
     protected String taste;
