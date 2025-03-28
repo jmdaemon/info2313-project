@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.function.Predicate;
 
+import utils.Library;
+
 public class PlantManager {
   public static short ERROR_FAILURE = 1;
   public static String WARN_FILE_OVERWRITE = "Warning: File already exists and will be overwritten.";
@@ -59,6 +61,8 @@ public class PlantManager {
 
     // Save data to disk
     // write(fp);
+    String[] lines = new String[5];
+    Library.write_buf(fp, lines, ERROR_FILE_WRITE);
   }
 
   // Read plants from disk to list
@@ -71,7 +75,7 @@ public class PlantManager {
     }
 
     // TODO: Read plant data from disk into memory
-    this.plants = parse(data);
+    this.plants = parse(fp);
   }
 
   // Filter plants according to a type
@@ -83,43 +87,21 @@ public class PlantManager {
   }
 
   // Parse data into plant data
-  private List<Plant> parse(File data) {
+  private List<Plant> parse(String fp) {
     List<Plant> loaded = new ArrayList<Plant>();
 
-    // Attempt to buffer read the file line by line
-    try {
-      Scanner freader = new Scanner(data);
-      while (freader.hasNextLine()) {
-        // TODO: We don't know what the format will look
-        // like so we don't use this data right now
-        String line = freader.nextLine();
+    // Read data to memory
+    List<String> lines = Library.read_buf(fp, ERROR_FILE_READ);
 
-        // Parse each line into plant data
-        // Plant plant = new Plant();
-        // loaded.add(plant);
-      }
-      freader.close();
-      
-    } catch (Exception e) {
-      System.out.println(ERROR_FILE_READ);
-      e.printStackTrace();
+    // Parse data
+    for (String line : lines) {
+      // Parse each line into plant data
+      // TODO: We don't know what the format will look
+      // like so we don't use this data right now
+      // Plant plant = new Plant();
+      // loaded.add(plant);
     }
 
     return loaded;
-  }
-
-  // Helper Functions:
-
-  // Write buffered data line-by-line to disk
-  private static void write(String fp, String[] lines) {
-    try {
-      FileWriter fwriter = new FileWriter(fp);
-      for (String line : lines)
-        fwriter.append(line);
-      fwriter.close();
-    } catch (Exception e) {
-      System.out.println(ERROR_FILE_WRITE);
-      e.printStackTrace();
-    }
   }
 }
