@@ -1,30 +1,13 @@
 package plant;
 
-public class Plant implements IPlant {
-  public PlantType plant_type;
-  protected PlantInfo info;    
-
-  public Plant(PlantInfo info) {
-    this.info = info;
+public interface Plant {
+  /* Retrieve the plant methods/instructions */
+  abstract String staking();
+  abstract String pruning();
+  default String fertilizing() {
+    return "STUB: Fertilizing";
   }
-  
-  @Override
-  public void Fertilize() {
-    System.out.println("Using fertilizer on " + info.name);
-  }
-  
-  @Override
-  public void Water() {
-      System.out.println("Watering " + info.name);
-  }
-
-  @Override
-  public void Prune() {
-      System.out.println("Prune " + info.name);
-  }
-
-  @Override
-  public void Stake() {
-      System.out.println("Stake " + info.name);
+  default String watering() {
+    return "STUB: Watering";
   }
 }

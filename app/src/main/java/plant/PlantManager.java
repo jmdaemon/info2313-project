@@ -9,12 +9,14 @@ import data.Data;
 import utils.Library;
 
 public class PlantManager {
-  private List<Plant> plants;
+  private List<AbstractPlant> plants;
 
-  public List<Plant> getPlants() { return this.plants; }
-  public void setPlants(List<Plant> plants) { this.plants = plants; }
+  //  API: //
+  // <===> //
+  public List<AbstractPlant> getPlants() { return this.plants; }
+  public void setPlants(List<AbstractPlant> plants) { this.plants = plants; }
 
-  public void add(final Plant plant) {
+  public void add(final AbstractPlant plant) {
     this.plants.add(plant);
   }
 
@@ -26,14 +28,14 @@ public class PlantManager {
 
   // Update a single plant in the list
   public void update(final int plant_index, final double plant_price) {
-    Plant p = this.plants.get(plant_index);
+    AbstractPlant p = this.plants.get(plant_index);
     // TODO: Set plant price
     this.plants.set(plant_index, p);
   }
   
   // Search for a plant according to type
-  public List<Plant> search(final PlantType plant_type) {
-    return this.filter(p -> p.plant_type != plant_type);
+  public List<AbstractPlant> search(final PlantType plant_type) {
+    return this.filter(p -> p.info.plant_type != plant_type);
   }
 
   // Save the plants in the list to disk
@@ -71,16 +73,15 @@ public class PlantManager {
   }
 
   // Filter plants according to a type
-  // public List<Plant> filter(PlantType plant_type) {
-  public List<Plant> filter(Predicate<Plant> pred) {
-    List<Plant> results = new ArrayList<Plant>(this.plants); // Clone plants
+  public List<AbstractPlant> filter(Predicate<AbstractPlant> pred) {
+    List<AbstractPlant> results = new ArrayList<AbstractPlant>(this.plants); // Clone plants
     results.removeIf(pred);
     return results;
   }
 
   // Parse data into plant data
-  private List<Plant> parse(String fp) {
-    List<Plant> loaded = new ArrayList<Plant>();
+  private List<AbstractPlant> parse(String fp) {
+    List<AbstractPlant> loaded = new ArrayList<AbstractPlant>();
 
     // Read data to memory
     List<String> lines = Library.read_buf(fp, Data.ERROR_FILE_READ);
