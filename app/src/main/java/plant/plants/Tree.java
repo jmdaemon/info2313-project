@@ -21,9 +21,7 @@ public class Tree extends AbstractPlant {
 
   @Override
   public String staking() {
-    return """
-        Place 2 metal/wood stakes of 5 ft near the branches.
-        Tie up stakes with the branch of a tree for wind security
-      """;
+    return "Place 2 metal/wood stakes of 5 ft near the branches."
+      + "Tie up stakes with the branch of a tree for wind security";
   }
 }

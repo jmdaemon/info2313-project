@@ -10,9 +10,11 @@ import plant.plants.Tree;
 public class PlantDemoSystem {
   public static void showPlantDetails(final AbstractPlant p) {
     System.out.println(p.info.name);
-    System.out.println(p.info.grow_instructions);
-    System.out.println(p.staking());
-    System.out.println(p.pruning());
+    System.out.println("=".repeat(16));
+    System.out.println("Growing: " + p.info.grow_instructions);
+    System.out.println("Staking: " + p.staking());
+    System.out.println("Pruning: " + p.pruning());
+    System.out.println("-".repeat(16));
   }
 
   public static void main(String[] args) {
