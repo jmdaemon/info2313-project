@@ -1,9 +1,17 @@
 package ui;
 
 import javafx.application.Application;
+import javafx.geometry.Orientation;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.Separator;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.TilePane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 // User Interface
@@ -33,20 +41,48 @@ import javafx.stage.Stage;
 // for the store owner/shop keeper
 
 public class GUI extends Application {
+  @Override
+  public void start(Stage stage) {
+    // Create initial plant interface
+    TilePane tp = new TilePane();
 
-    @Override
-    public void start(Stage stage) {
-        String javaVersion = System.getProperty("java.version");
-        String javafxVersion = System.getProperty("javafx.version");
-        Label l = new Label("Hello, JavaFX " + javafxVersion + ", running on Java " + javaVersion + ".");
-        Scene scene = new Scene(new StackPane(l), 640, 480);
-        stage.setScene(scene);
-        stage.show();
-    }
+    VBox vb = new VBox();
+    vb.setPrefWidth(100);
+    vb.setPrefHeight(200);
 
-    public static void main(String[] args) {
-        System.out.println("Show Graphical User Interface");
-        launch();
-    }
+    ImageView iv = new ImageView("file:/home/jmd/Media/Pictures/Avatars/default-user.png");
 
+    HBox hb1 = new HBox();
+    HBox hb2 = new HBox();
+    Label lbl_plant_name = new Label("Plant Name");
+    Label lbl_plant_price = new Label("Plant Price");
+    Button btn_plant_view = new Button("View");
+
+    Separator sep_plant = new Separator(Orientation.HORIZONTAL);
+    
+    // Packing
+    hb1.getChildren().addAll(lbl_plant_name);
+    hb2.getChildren().addAll(lbl_plant_price, sep_plant, btn_plant_view);
+    vb.getChildren().addAll(
+        iv,
+        hb1,
+        hb2
+    );
+
+    tp.getChildren().addAll(vb);
+
+    Scene scene = new Scene(tp, 640, 480);
+
+    // String javaVersion = System.getProperty("java.version");
+    // String javafxVersion = System.getProperty("javafx.version");
+    // Label l = new Label("Hello, JavaFX " + javafxVersion + ", running on Java " + javaVersion + ".");
+    // Scene scene = new Scene(new StackPane(l), 640, 480);
+    stage.setScene(scene);
+    stage.show();
+  }
+
+  public static void main(String[] args) {
+    System.out.println("Show Graphical User Interface");
+    launch();
+  }
 }
