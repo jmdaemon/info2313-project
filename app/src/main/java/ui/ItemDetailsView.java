@@ -1,5 +1,7 @@
 package ui;
 
+import java.net.URL;
+
 // import java.net.URI;
 
 import javafx.concurrent.Worker;
@@ -15,7 +17,8 @@ public class ItemDetailsView {
   // DATA
   private PlantModel model;
   
-  final static String PLANT_PAGE_TMPL = "index.html";
+  // final static String PLANT_PAGE_TMPL = "index.html";
+  final static String PLANT_PAGE_TMPL = "plant-details-page.html";
 
   // Widgets
   private VBox vb;
@@ -30,19 +33,20 @@ public class ItemDetailsView {
     // Create a new web page object, inject our Java library code, and load it
     this.page = new WebView();
 
-    this.page.getEngine().load("http://google.com");
+    // Test Page
+    // this.page.getEngine().load("http://google.com");
 
-    // this.page
-    //   .getEngine()
-    //   .getLoadWorker()
-    //   .stateProperty()
-    //   .addListener((obs, before, after) -> {
-    //     // Load our library
-    //     if (after == Worker.State.SUCCEEDED) {
-    //       JSObject jsobj = (JSObject) this.page.getEngine().executeScript("window");
-    //       jsobj.setMember("item_page", new ItemPage());
-    //     }
-    // });
+    this.page
+      .getEngine()
+      .getLoadWorker()
+      .stateProperty()
+      .addListener((obs, before, after) -> {
+        // Load our library
+        if (after == Worker.State.SUCCEEDED) {
+          JSObject jsobj = (JSObject) this.page.getEngine().executeScript("window");
+          jsobj.setMember("item_page", new ItemPage());
+        }
+    });
 
     // this.page.getEngine().load(this.getClass().getResource(PLANT_PAGE_TMPL).toString());
     // this.page.getEngine().load(PLANT_PAGE_TMPL);
@@ -55,6 +59,20 @@ public class ItemDetailsView {
   }
   
   // API
+  
+  // Set an element to change the scene root
+  // public void setResource(Scene root) {
+  // public void setResource(String rsrc) {
+  public void setResource(URL url) {
+    // this.page.getEngine().load(root.getClass().getResource("/" + PLANT_PAGE_TMPL).toExternalForm());
+    // this.page.getEngine().load(root.getClass().getResource("/" + PLANT_PAGE_TMPL).toExternalForm());
+    // this.page.getEngine().load(root.getClass().getResource(PLANT_PAGE_TMPL).toExternalForm());
+
+    // URL url = Thread.currentThread().getContextClassLoader().getResource("demo/index.html");
+    // URL url = Thread.currentThread().getContextClassLoader().getResource("demo/index.html");
+    // URL url = Thread.currentThread().getContextClassLoader().getResource("demo/index.html");
+    this.page.getEngine().load("file://" + url.getPath());
+  }
 
   // Set an element to change the scene root
   public void setNavigateEvent(Scene root, Parent next) {

@@ -77,6 +77,9 @@ public class GUI extends Application {
     this.gallery.setNavigateEvent(this.scene, this.detail_view.asParent());
     this.detail_view.setNavigateEvent(this.scene, this.gallery.asParent());
 
+    // Set resource on button widgets
+    this.detail_view.setResource(this.getClass().getResource("/plant-details-page.html"));
+
     // Show our scene
     stage.setScene(scene);
     stage.show();
