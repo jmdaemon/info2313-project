@@ -28,8 +28,7 @@ public class Gallery {
     PlantManager pm = GUI.createPlantManagerFixture();
 
     for (AbstractPlant plant : pm.getPlants()) {
-      // TODO: Configure plant data in model
-      PlantModel model = new PlantModel(); // Pass in here
+      PlantModel model = new PlantModel(plant);
       PlantController control = new PlantController(model);
 
       PlantView listing = new PlantView(control, model);
