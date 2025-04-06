@@ -56,6 +56,8 @@ public class GUI extends Application {
   private final static int WIN_MIN_WIDTH = 640;
   private final static int WIN_MIN_HEIGHT = 480;
 
+  final static String PLANT_PAGE_TMPL = "/plant-details-page.html";
+
   // Panels
   private Gallery gallery;
   private ItemDetailsView detail_view;
@@ -78,7 +80,7 @@ public class GUI extends Application {
     this.detail_view.setNavigateEvent(this.scene, this.gallery.asParent());
 
     // Set resource on button widgets
-    this.detail_view.setResource(this.getClass().getResource("/plant-details-page.html"));
+    this.detail_view.setResource(this.getClass().getResource(PLANT_PAGE_TMPL));
 
     // Show our scene
     stage.setScene(scene);
