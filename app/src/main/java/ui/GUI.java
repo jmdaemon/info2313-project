@@ -1,23 +1,13 @@
 package ui;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import javafx.application.Application;
-import javafx.geometry.Orientation;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.Separator;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.TilePane;
-import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import plant.AbstractPlant;
+
+// TODO: Deal with the import bloat later on
 import plant.GrowType;
 import plant.PlantInfo;
 import plant.PlantManager;
@@ -26,6 +16,15 @@ import plant.Season;
 import plant.plants.Creeper;
 import plant.plants.Herb;
 import plant.plants.Tree;
+
+
+// Plant
+// - Listing
+// - Details Page
+//
+// Main Gallery
+//
+// Admin Panel
 
 // User Interface
 
@@ -54,37 +53,24 @@ import plant.plants.Tree;
 // for the store owner/shop keeper
 
 public class GUI extends Application {
-  // Data
-  private PlantManager pm;
-  // private PlantManager pm = new PlantManager();
-
-    // this.pm = new PlantManager();
-
   private final static int WIN_MIN_WIDTH = 640;
   private final static int WIN_MIN_HEIGHT = 480;
 
-  // Widgets
-  private List<PlantListing> plants;
-  private TilePane tp = new TilePane();
-
-  // Set Properties & Create UI 
   @Override
   public void start(Stage stage) {
-    setup();
-    // For all plants, create a plant listing elem
-    for (AbstractPlant plant : this.pm.getPlants()) {
-      PlantListing listing = new PlantListing(plant);
-      this.plants.add(listing);
-      tp.getChildren().addAll(listing.vb);
-    }
-
-    Scene scene = new Scene(tp, WIN_MIN_WIDTH, WIN_MIN_HEIGHT);
-
+    Gallery gallery = new Gallery(new GalleryController());
+    Scene scene = new Scene(gallery.asParent(), WIN_MIN_WIDTH, WIN_MIN_HEIGHT);
     stage.setScene(scene);
     stage.show();
   }
-  
-  public void setup() {
+
+  public void run(String[] args) {
+    System.out.println("Show Graphical User Interface");
+    launch();
+  }
+
+  // TEST FIXTURE DATA
+  public static PlantManager createPlantManagerFixture() {
     // Create fixtures
     Tree apple_tree = new Tree(
       new PlantInfo(
@@ -130,17 +116,11 @@ public class GUI extends Application {
       ),
       "Red"
     );
-    // this.pm = new PlantManager();
-    this.pm.add(apple_tree);
-    this.pm.add(basil);
-    this.pm.add(money_plant);
-
-    this.plants = new ArrayList<PlantListing>();
-  }
-
-  public void run(String[] args) {
-    System.out.println("Show Graphical User Interface");
-    // setup();
-    launch();
+    
+    PlantManager pm = new PlantManager();
+    pm.add(apple_tree);
+    pm.add(basil);
+    pm.add(money_plant);
+    return pm;
   }
 }
