@@ -11,7 +11,7 @@ dependencies {
     implementation 'org.apache.commons:commons-text'
     implementation project(':lib')
     implementation project(':data')
-    implementation project(':ui')
+    // implementation project(':ui')
 }
 
 application {

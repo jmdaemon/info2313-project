@@ -19,6 +19,10 @@ public class PlantManager {
 
   //  API: //
   // <===> //
+  public PlantManager() {
+    this.plants = new ArrayList<AbstractPlant>();
+  }
+
   public List<AbstractPlant> getPlants() { return this.plants; }
   public void setPlants(List<AbstractPlant> plants) { this.plants = plants; }
 

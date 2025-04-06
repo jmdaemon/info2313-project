@@ -8,4 +8,5 @@
  */
 
 rootProject.name = 'plant-management-system'
-include('app', 'lib', 'data', 'ui')
+// include('app', 'lib', 'data', 'ui')
+include('app', 'lib', 'data')
