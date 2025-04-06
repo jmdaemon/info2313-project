@@ -56,10 +56,28 @@ public class GUI extends Application {
   private final static int WIN_MIN_WIDTH = 640;
   private final static int WIN_MIN_HEIGHT = 480;
 
+  // Panels
+  private Gallery gallery;
+  private ItemDetailsView detail_view;
+  // private Scene root;
+  private Scene scene;
+
   @Override
   public void start(Stage stage) {
-    Gallery gallery = new Gallery(new GalleryController());
-    Scene scene = new Scene(gallery.asParent(), WIN_MIN_WIDTH, WIN_MIN_HEIGHT);
+    // Create our different panels/windows
+    this.gallery = new Gallery(new GalleryController());
+    this.detail_view = new ItemDetailsView();
+
+    // Scene scene = new Scene(this.gallery.asParent(), WIN_MIN_WIDTH, WIN_MIN_HEIGHT);
+    // scene = new Scene(this.gallery.asParent(), WIN_MIN_WIDTH, WIN_MIN_HEIGHT);
+    // this.scene = new Scene(this.detail_view.asParent(), WIN_MIN_WIDTH, WIN_MIN_HEIGHT);
+    this.scene = new Scene(this.gallery.asParent(), WIN_MIN_WIDTH, WIN_MIN_HEIGHT);
+
+    // Link the button widgets in each panel to switch the root
+    this.gallery.setNavigateEvent(this.scene, this.detail_view.asParent());
+    this.detail_view.setNavigateEvent(this.scene, this.gallery.asParent());
+
+    // Show our scene
     stage.setScene(scene);
     stage.show();
   }

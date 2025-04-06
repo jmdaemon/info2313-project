@@ -2,6 +2,7 @@ package ui;
 
 import javafx.geometry.Orientation;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
@@ -67,6 +68,13 @@ public class PlantView {
   }
 
   // Internal
+
+  // Set an element to change the scene root
+  public void setNavigateEvent(Scene root, Parent next) {
+    this.btn_plant_view.setOnMouseClicked(_event -> {
+      root.setRoot(next);
+    });
+  }
 
   // API
   public Parent asParent() {
