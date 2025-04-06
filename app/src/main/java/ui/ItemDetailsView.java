@@ -18,7 +18,7 @@ public class ItemDetailsView {
   private PlantModel model;
   
   // final static String PLANT_PAGE_TMPL = "index.html";
-  final static String PLANT_PAGE_TMPL = "plant-details-page.html";
+  // final static String PLANT_PAGE_TMPL = "plant-details-page.html";
 
   // Widgets
   private VBox vb;
