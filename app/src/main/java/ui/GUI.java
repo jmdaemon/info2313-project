@@ -73,6 +73,8 @@ public class GUI extends Application {
   // Panels
   private Gallery gallery;
   private ItemDetailsView detail_view;
+  private Editor editor;
+
   // private Scene root;
   private Scene scene;
 
@@ -81,6 +83,7 @@ public class GUI extends Application {
     // Create our different panels/windows
     this.gallery = new Gallery(new GalleryController());
     this.detail_view = new ItemDetailsView();
+    this.editor = new Editor();
 
     // Scene scene = new Scene(this.gallery.asParent(), WIN_MIN_WIDTH, WIN_MIN_HEIGHT);
     // scene = new Scene(this.gallery.asParent(), WIN_MIN_WIDTH, WIN_MIN_HEIGHT);
@@ -88,7 +91,9 @@ public class GUI extends Application {
     this.scene = new Scene(this.gallery.asParent(), WIN_MIN_WIDTH, WIN_MIN_HEIGHT);
 
     // Link the button widgets in each panel to switch the root
+    // TODO: Update navigateEvent
     this.gallery.setNavigateEvent(this.scene, this.detail_view.asParent());
+    // this.gallery.setNavigateEvent(this.scene, this.detail_view.asParent());
     this.detail_view.setNavigateEvent(this.scene, this.gallery.asParent());
 
     // Set resource on button widgets

@@ -25,6 +25,7 @@ public class Gallery {
     this.tp = new TilePane();
 
     // Create Plant Gallery
+    // TODO: Create & pass this in main
     PlantManager pm = GUI.createPlantManagerFixture();
 
     for (AbstractPlant plant : pm.getPlants()) {
