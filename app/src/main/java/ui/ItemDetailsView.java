@@ -13,7 +13,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.web.WebView;
 import netscape.javascript.JSObject;
 
-public class ItemDetailsView {
+public class ItemDetailsView implements Component, Navigator, Resource  {
   // DATA
   private PlantModel model;
   
@@ -62,27 +62,22 @@ public class ItemDetailsView {
   
   // API
   
-  // Set an element to change the scene root
-  // public void setResource(Scene root) {
-  // public void setResource(String rsrc) {
-  public void setResource(URL url) {
-    // this.page.getEngine().load(root.getClass().getResource("/" + PLANT_PAGE_TMPL).toExternalForm());
-    // this.page.getEngine().load(root.getClass().getResource("/" + PLANT_PAGE_TMPL).toExternalForm());
-    // this.page.getEngine().load(root.getClass().getResource(PLANT_PAGE_TMPL).toExternalForm());
-
-    // URL url = Thread.currentThread().getContextClassLoader().getResource("demo/index.html");
-    // URL url = Thread.currentThread().getContextClassLoader().getResource("demo/index.html");
-    // URL url = Thread.currentThread().getContextClassLoader().getResource("demo/index.html");
+  @Override
+  public void setResource(final URL url) {
     this.page.getEngine().load("file://" + url.getPath());
   }
 
   // Set an element to change the scene root
-  public void setNavigateEvent(Scene root, Parent next) {
-    this.btn_gallery.setOnMouseClicked(_event -> {
-      root.setRoot(next);
-    });
+  @Override
+  public void setNavigateEvent(final String elem, Scene root, Parent next) {
+    if (elem.equals("btn-back")) {
+      this.btn_gallery.setOnMouseClicked(_event -> {
+        root.setRoot(next);
+      });
+    }
   }
 
+  @Override
   public Parent asParent() {
     return this.vb;
   }

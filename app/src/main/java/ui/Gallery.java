@@ -3,24 +3,28 @@ package ui;
 import java.util.List;
 import java.util.ArrayList;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.TilePane;
 import plant.AbstractPlant;
 import plant.PlantManager;
 
-public class Gallery {
+public class Gallery implements Component, Navigator {
+  final static String ERR_NAV_ELEM_NOT_FOUND = "Error: Navigator element not found.";
   // MVC
   private GalleryController controller;
 
   // Widgets
-  private List<PlantView> plants;
+  private ObservableList<PlantView> ol_plants;
 
   private TilePane tp;
 
   public Gallery(final GalleryController controller) {
     this.controller = controller;
-    this.plants = new ArrayList<PlantView>();
+
+    this.ol_plants = FXCollections.observableArrayList();
 
     this.tp = new TilePane();
 
@@ -35,7 +39,7 @@ public class Gallery {
       PlantView listing = new PlantView(control, model);
 
       // Add to our tile pane
-      this.plants.add(listing);
+      this.ol_plants.add(listing);
       tp.getChildren().addAll(listing.asParent());
     }
   }
@@ -43,14 +47,20 @@ public class Gallery {
   // Internal
 
   // API
-  // Set an element to change the scene root
-  public void setNavigateEvent(Scene root, Parent next) {
-    for (PlantView listing: this.plants) {
-      listing.setNavigateEvent(root, next);
+
+  // Set all plant listings to navigate to detail view
+  @Override
+  public void setNavigateEvent(final String elem, Scene root, Parent next) {
+    if (elem.equals("ol-plant-listing")) {
+      for (PlantView listing: this.ol_plants) {
+        listing.setNavigateEvent(root, next);
+      }
+    } else {
+      System.out.println(ERR_NAV_ELEM_NOT_FOUND);
     }
   }
 
-  public Parent asParent() {
-    return this.tp;
-  }
+  @Override
+  public Parent asParent() { return this.tp; }
+  
 }
