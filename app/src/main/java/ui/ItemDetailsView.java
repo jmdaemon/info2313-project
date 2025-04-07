@@ -54,6 +54,8 @@ public class ItemDetailsView {
     this.btn_gallery = new Button("Back");
 
     this.vb = new VBox();
+    // this.vb.setPrefWidth(1920);
+    // this.vb.setPrefHeight(1080);
 
     vb.getChildren().addAll(this.btn_gallery, page);
   }

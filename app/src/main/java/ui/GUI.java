@@ -18,6 +18,16 @@ import plant.plants.Herb;
 import plant.plants.Tree;
 
 
+// TODO:
+// - Admin Panel
+//   - Add (new) plant 
+//   - Del plant 
+//   - Update plant price
+// - Gallery HUB Panel
+//   - Nav Panel to Admin Page
+//   - Search Plants
+//   - Import/Export Plants
+
 // Plant
 // - Listing
 // - Details Page
@@ -55,6 +65,8 @@ import plant.plants.Tree;
 public class GUI extends Application {
   private final static int WIN_MIN_WIDTH = 640;
   private final static int WIN_MIN_HEIGHT = 480;
+  // private final static int WIN_MIN_WIDTH = 1600;
+  // private final static int WIN_MIN_HEIGHT = 900;
 
   final static String PLANT_PAGE_TMPL = "/plant-details-page.html";
 
