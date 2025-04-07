@@ -92,9 +92,8 @@ public class GUI extends Application {
 
     // Link the button widgets in each panel to switch the root
     // TODO: Update navigateEvent
-    this.gallery.setNavigateEvent(this.scene, this.detail_view.asParent());
-    // this.gallery.setNavigateEvent(this.scene, this.detail_view.asParent());
-    this.detail_view.setNavigateEvent(this.scene, this.gallery.asParent());
+    this.gallery.setNavigateEvent("ol-plant-listing", this.scene, this.detail_view.asParent());
+    this.detail_view.setNavigateEvent("btn-back", this.scene, this.gallery.asParent());
 
     // Set resource on button widgets
     this.detail_view.setResource(this.getClass().getResource(PLANT_PAGE_TMPL));
