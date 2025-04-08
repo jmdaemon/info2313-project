@@ -10,6 +10,7 @@ public class Creeper extends AbstractPlant {
     super(plant);
     this.color = color;
   }
+
   public String getColor() { return this.color; }
   public void setColor(final String color) { this.color = color; }
   
