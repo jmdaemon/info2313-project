@@ -6,6 +6,15 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
+// User Interface
+
+// We're going to have a graphical user interface that is simmilar
+// to online e-commerce stores, with a picture of the plant, and
+// its details listed.
+// 
+// We will also offer admin panels for managing prices & plant information
+// for the store owner/shop keeper
+
 public class GUI extends Application {
 
     @Override

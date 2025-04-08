@@ -1,21 +1,13 @@
-public abstract class Plant implements IPlant 
-{
-    protected PlantInfo info;    
+package plant;
 
-    public Plant(PlantInfo info) 
-    {
-        this.info = info;
-    }
-
-    @Override
-    public void Fertilize() 
-    {
-        System.out.println("Using fertilizer on " + info.name);
-    }
-
-    @Override
-    public void Water() 
-    {
-        System.out.println("Watering " + info.name);
-    }
+public interface Plant {
+  /* Retrieve the plant methods/instructions */
+  abstract String staking();
+  abstract String pruning();
+  default String fertilizing() {
+    return "STUB: Fertilizing";
+  }
+  default String watering() {
+    return "STUB: Watering";
+  }
 }
