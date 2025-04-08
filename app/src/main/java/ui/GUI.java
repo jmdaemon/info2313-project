@@ -1,5 +1,6 @@
 package ui;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -95,6 +96,7 @@ public class GUI extends Application {
     this.gallery.setNavigateEvent("ol-plant-listing", this.scene, this.detail_view.asParent());
     this.gallery.setNavigateEvent("btn-edit", this.scene, this.editor.asParent());
     this.detail_view.setNavigateEvent("btn-back", this.scene, this.gallery.asParent());
+    // this.editor.setNavigateEvent("btn-add", this.scene, this.gallery.asParent());
 
     // Set resource on button widgets
     this.detail_view.setResource(this.getClass().getResource(PLANT_PAGE_TMPL));
@@ -117,7 +119,7 @@ public class GUI extends Application {
         "Apple Tree",
         List.of("Common Apple"),
         Season.SPRING,
-        new Date(),
+        LocalDate.now(),
         50,
         7300, 
         GrowType.Grafting,
@@ -132,7 +134,7 @@ public class GUI extends Application {
         "Basil",
         List.of("Sweet Basil"),
         Season.SPRING,
-        new Date(),
+        LocalDate.now(),
         5,
         150, 
         GrowType.Seeding, // Or Cutting
@@ -147,7 +149,7 @@ public class GUI extends Application {
         "Money Plant",
         List.of("Devils Ivy"),
         Season.SPRING,
-        new Date(),
+        LocalDate.now(),
         15,
         1825, 
         GrowType.Cutting,
