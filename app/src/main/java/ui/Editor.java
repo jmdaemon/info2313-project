@@ -4,6 +4,8 @@ import java.util.Arrays;
 import java.util.List;
 
 import javafx.collections.ObservableList;
+import javafx.event.Event;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -15,6 +17,8 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import plant.AbstractPlant;
 import plant.PlantManager;
 
@@ -26,6 +30,9 @@ public class Editor {
   // Widgets
 
   // Components
+  private PlantForm form;
+  private Stage form_window;
+  private Scene form_dialog;
   // private class SearchPane {
   //   private GridPane gp;
     
@@ -63,10 +70,10 @@ public class Editor {
   private VBox vb;
 
   public Editor() {
+
     this.pm = GUI.createPlantManagerFixture();
 
     // Button Bar
-    this.hb = new HBox();
     this.btn_add = new Button("Add");
     this.btn_del = new Button("Delete");
     this.btn_edit = new Button("Edit");
@@ -82,11 +89,9 @@ public class Editor {
 
     // Paragraph View
 
-    this.vb = new VBox();
+
     
     // Properties
-    this.vb.setSpacing(12);
-    this.hb.setSpacing(12);
 
     // this.titles.addAll(List.of(
     //     new Label("Growing Method"),
@@ -130,10 +135,12 @@ public class Editor {
 
     // this.lbl_grow = new Label("Growing Method");
 
+    /*
     for (TableColumn<PlantModel, String> col : this.tbl_cols) {
       col.setCellValueFactory(new PropertyValueFactory<>("name"));
       this.tbl_plant_info.getColumns().add(col);
     }
+    */
 
     // Table Items
     for (AbstractPlant plant : this.pm.getPlants()) {
@@ -157,6 +164,11 @@ public class Editor {
     
     
     // Packing
+    this.hb = new HBox();
+    this.vb = new VBox();
+    this.vb.setSpacing(12);
+    this.hb.setSpacing(12);
+
     this.hb.getChildren().addAll(
         this.btn_back,
         this.btn_add,
@@ -185,16 +197,86 @@ public class Editor {
 
     // TableView
 
+
+
+    setupListeners();
   }
+  // Internal
+  // private void setupListeners(Scene root) {
+  private void setupListeners() {
+    this.btn_add.setOnMouseClicked(event -> {
+      this.form = new PlantForm();
+      // setupDialog(root, this.form.asParent(), event, "Add a new plant");
+      setupDialog(this.form.asParent(), event, "Add a new plant");
+    });
+
+    this.btn_edit.setOnMouseClicked(event -> {
+      // TODO: Assume we have a plant selected
+      // TODO: For now assume we just get the first plant
+      AbstractPlant plant = this.pm.getPlants().get(0);
+      
+      // PlantForm form = new PlantForm(plant);
+      this.form = new PlantForm(plant);
+      // setupDialog(root, form.asParent(), event, "Edit an existing plant");
+      setupDialog(this.form.asParent(), event, "Edit an existing plant");
+    });
+  }
+
+  // private void setupDialog(Scene root, Parent dialog, Event event, final String title) {
+  // private void setupDialog(Parent dialog, Event event, final String title) {
+  private void setupDialog(Parent dialog, Event event, final String title) {
+    // Stage stage = new Stage();
+
+    // Scene root = new Scene(dialog);
+    // root.setRoot(this.asParent());
+
+    // Scene root = new Scene(dialog);
+    // stage.setScene(root);
+    // stage.initOwner(((Node) event.getSource()).getScene().getWindow());
+    // stage.initOwner(((Node) event.getSource()).getScene().getWindow());
+    // stage.setScene(new Scene(dialog));
+    // stage.initOwner(root);
+    this.form_dialog = new Scene(dialog);
+    this.form_window = new Stage();
+    this.form_window.setScene(this.form_dialog);
+    this.form_window.setTitle("Edit an existing plant");
+    this.form_window.initModality(Modality.WINDOW_MODAL);
+    this.form_window.show();
+    /*
+    Stage stage = 
+    stage.setScene(new Scene(dialog));
+    stage.setTitle("Edit an existing plant");
+    stage.initModality(Modality.WINDOW_MODAL);
+    stage.showAndWait();
+    */
+    // stage.show();
+  }
+
 
   // API
 
   // Set an element to change the scene root
-  public void setNavigateEvent(Scene root, Parent next) {
-    this.btn_back.setOnMouseClicked(_event -> {
-      root.setRoot(next);
-    });
+  public void setNavigateEvent(final String elem, Scene root, Parent next) {
+    switch(elem) {
+      case "btn-back" -> {
+        this.btn_back.setOnMouseClicked(_event -> {
+          root.setRoot(next);
+        });
+      }
+      // case "btn-add", "btn-edit" -> {
+      // }
+    }
   }
+
+  /*
+  public void setDialog(final String elem, Scene root) {
+    switch(elem) {
+      case "btn-add", "btn-edit" -> {
+        setupListeners();
+      }
+    }
+  }
+  */
 
   public Parent asParent() {
     return this.vb;

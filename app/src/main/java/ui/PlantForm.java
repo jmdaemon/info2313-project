@@ -2,9 +2,14 @@ package ui;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javafx.geometry.HPos;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
@@ -24,7 +29,7 @@ import plant.plants.Creeper;
 import plant.plants.Herb;
 import plant.plants.Tree;
 
-public class PlantForm {
+public class PlantForm implements Component {
   private GridPane gp;
 
   private ColumnConstraints cc1;
@@ -64,16 +69,16 @@ public class PlantForm {
     // Initialize all controls
     createLabels();
     createControls();
-    setupListeners();
 
     this.btn_submit.setText("Submit");
+    packControls();
+    setupListeners();
   }
 
   // Edit:
   public PlantForm(AbstractPlant plant) {
     createLabels();
     createControls();
-    setupListeners();
 
     this.btn_submit.setText("Done");
 
@@ -109,6 +114,10 @@ public class PlantForm {
         this.tf_plant_extra.setText(color);
       }
     }
+    
+    // Packing
+    packControls();
+    setupListeners();
   }
 
   // Internal
@@ -122,8 +131,9 @@ public class PlantForm {
     this.lbl_lifespan = new Label("Lifespan (Days)");
     this.lbl_grow_method = new Label("Growing Method"); 
     this.lbl_grow_instructions = new Label("Growing Instructions"); 
-    this.lbl_plant_extra = new Label();
+    this.lbl_plant_extra = new Label("");
 
+    this.all_labels = new ArrayList<Label>();
     all_labels.addAll(List.of(
           lbl_name, lbl_names, lbl_plant_type, lbl_pot_season,
           lbl_pot_date, lbl_price, lbl_price, lbl_lifespan,
@@ -158,6 +168,33 @@ public class PlantForm {
 
     this.dp_pot_date.setPromptText("Select the best date for planting.");
     this.ta_grow_instructions.setPromptText("Note any extra special growing instructions here.");
+  }
+
+  private void packControls() {
+    this.gp = new GridPane();
+    this.gp.setPadding(new Insets(12, 12, 12, 12));
+    this.gp.setVgap(12); 
+    this.gp.setHgap(12);
+
+    this.cc1 = new ColumnConstraints(150);
+    this.cc1.setHalignment(HPos.RIGHT);
+
+    this.cc2 = new ColumnConstraints(100);
+    this.cc2.setHalignment(HPos.LEFT);
+    
+    this.gp.addRow(0, this.lbl_name, this.tf_name);
+    this.gp.addRow(1, this.lbl_names, this.tf_names);
+    this.gp.addRow(2, this.lbl_plant_type, this.cb_plant_type);
+    this.gp.addRow(3, this.lbl_pot_season , this.cb_pot_season);
+    this.gp.addRow(4, this.lbl_pot_date, this.dp_pot_date);
+    this.gp.addRow(5, this.lbl_price, this.tf_price);
+    this.gp.addRow(6, this.lbl_grow_method, this.cb_grow_method);
+    this.gp.addRow(7, this.lbl_grow_instructions, this.ta_grow_instructions);
+    this.gp.addRow(8, this.btn_submit);
+
+    this.btn_submit.setAlignment(Pos.CENTER_RIGHT);
+
+
   }
 
   private void setupListeners() {
@@ -244,5 +281,9 @@ public class PlantForm {
     }
   }
 
-  // Edit
+  // API
+  @Override
+  public Parent asParent() {
+    return this.gp;
+  }
 }
