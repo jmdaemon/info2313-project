@@ -7,6 +7,8 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.TilePane;
 import plant.AbstractPlant;
 import plant.PlantManager;
@@ -19,6 +21,9 @@ public class Gallery implements Component, Navigator {
   // Widgets
   private ObservableList<PlantView> ol_plants;
 
+  private HBox hb;
+  private Button btn_editor;
+
   private TilePane tp;
 
   public Gallery(final GalleryController controller) {
@@ -27,6 +32,11 @@ public class Gallery implements Component, Navigator {
     this.ol_plants = FXCollections.observableArrayList();
 
     this.tp = new TilePane();
+    this.hb = new HBox();
+    this.btn_editor = new Button("Editor");
+    
+    this.hb.getChildren().addAll(this.btn_editor);
+    this.tp.getChildren().addAll(this.hb);
 
     // Create Plant Gallery
     // TODO: Create & pass this in main
@@ -51,12 +61,18 @@ public class Gallery implements Component, Navigator {
   // Set all plant listings to navigate to detail view
   @Override
   public void setNavigateEvent(final String elem, Scene root, Parent next) {
-    if (elem.equals("ol-plant-listing")) {
-      for (PlantView listing: this.ol_plants) {
-        listing.setNavigateEvent(root, next);
+    switch(elem) {
+      case "ol-plant-listing" -> {
+        for (PlantView listing: this.ol_plants) {
+          listing.setNavigateEvent(root, next);
+        }
       }
-    } else {
-      System.out.println(ERR_NAV_ELEM_NOT_FOUND);
+      case "btn-edit" -> {
+        this.btn_editor.setOnMouseClicked(_event -> {
+          root.setRoot(next);
+        });
+      }
+      default -> System.out.println(ERR_NAV_ELEM_NOT_FOUND);
     }
   }
 
