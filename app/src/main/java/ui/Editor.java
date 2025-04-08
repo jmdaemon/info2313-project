@@ -11,6 +11,7 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -40,6 +41,9 @@ public class Editor {
   private Button btn_save;
   private Button btn_back;
 
+  private List<Label> titles;
+  private HBox hb_info;
+
   // Table View
   private ChoiceBox<String> cb_plant;
   private List<TableColumn<PlantModel, String>> tbl_cols;
@@ -63,12 +67,14 @@ public class Editor {
 
     // Button Bar
     this.hb = new HBox();
-    this.btn_add = new Button();
-    this.btn_del = new Button();
-    this.btn_edit = new Button();
-    this.btn_load = new Button();
-    this.btn_save = new Button();
-    this.btn_back = new Button();
+    this.btn_add = new Button("Add");
+    this.btn_del = new Button("Delete");
+    this.btn_edit = new Button("Edit");
+    this.btn_load = new Button("Load");
+    this.btn_save = new Button("Save");
+    this.btn_back = new Button("Back");
+
+    this.hb_info = new HBox();
 
     // Table View
     this.cb_plant = new ChoiceBox<String>();
@@ -81,6 +87,22 @@ public class Editor {
     // Properties
     this.vb.setSpacing(12);
     this.hb.setSpacing(12);
+
+    // this.titles.addAll(List.of(
+    //     new Label("Growing Method"),
+    //     new Label("Growing Instructions"),
+    //     new Label("Fertilizing Method"),
+    //     new Label("Watering Method"),
+    //     new Label("Staking Method"),
+    //     new Label("Pruning Method")
+    // ));
+
+    // this.hb_info.getChildren().addAll(
+    // );
+
+    // this.hb_info.getChildren()
+    //   .addAll(new Label());
+    
 
     // Table
     this.tbl_plant_info.setPlaceholder(new Label("No plants available to display."));
@@ -109,6 +131,7 @@ public class Editor {
     // this.lbl_grow = new Label("Growing Method");
 
     for (TableColumn<PlantModel, String> col : this.tbl_cols) {
+      col.setCellValueFactory(new PropertyValueFactory<>("name"));
       this.tbl_plant_info.getColumns().add(col);
     }
 
@@ -148,11 +171,16 @@ public class Editor {
 
     // Selection ChoiceBox
     this.cb_plant.setOnAction((event) -> {
-      final int selectedIndex = this.cb_plant.getSelectionModel().getSelectedIndex();
-      final Object selectedItem = this.cb_plant.getSelectionModel().getSelectedItem();
+      // Set labels
+      final int selected = this.cb_plant.getSelectionModel().getSelectedIndex();
+      
+      final AbstractPlant plant = this.pm.getPlants().get(selected);
 
-      System.out.println("Selection made: [" + selectedIndex + "] " + selectedItem);
-      System.out.println("   ChoiceBox.getValue(): " + this.cb_plant.getValue());
+      // final int selectedIndex = this.cb_plant.getSelectionModel().getSelectedIndex();
+      // final Object selectedItem = this.cb_plant.getSelectionModel().getSelectedItem();
+
+      // System.out.println("Selection made: [" + selectedIndex + "] " + selectedItem);
+      // System.out.println("   ChoiceBox.getValue(): " + this.cb_plant.getValue());
     });
 
     // TableView
