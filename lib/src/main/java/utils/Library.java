@@ -11,9 +11,10 @@ public class Library {
   // Write data buffered line-by-line to disk
   public static void write_buf(String fp, String[] lines, String error) {
     try {
-      FileWriter fwriter = new FileWriter(fp);
+      FileWriter fwriter = new FileWriter(fp, true);
       for (String line : lines)
         fwriter.append(line);
+        fwriter.append("\n");
       fwriter.close();
     } catch (Exception e) {
       System.out.println(error);

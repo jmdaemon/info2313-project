@@ -1,6 +1,6 @@
 package plant;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 /**
@@ -17,7 +17,7 @@ public class PlantInfo {
   public List<String> alt_names;
 
   public Season pot_time;
-  public Date pot_date;
+  public LocalDate pot_date;
 
   public double price;
   public int lifespan;
@@ -31,7 +31,7 @@ public class PlantInfo {
       final String name,
       final List<String> alt_names,
       final Season pot_time,
-      final Date pot_date,
+      final LocalDate pot_date,
       final double price,
       final int lifespan,
       final GrowType grow_method,

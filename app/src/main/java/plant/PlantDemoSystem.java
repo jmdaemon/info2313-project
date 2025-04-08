@@ -1,6 +1,6 @@
 package plant;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 import plant.plants.Creeper;
@@ -23,7 +23,7 @@ public class PlantDemoSystem {
         "Apple Tree",
         List.of("Common Apple"),
         Season.SPRING,
-        new Date(),
+        LocalDate.now(),
         50,
         7300, 
         GrowType.Grafting,
@@ -38,7 +38,7 @@ public class PlantDemoSystem {
         "Basil",
         List.of("Sweet Basil"),
         Season.SPRING,
-        new Date(),
+        LocalDate.now(),
         5,
         150, 
         GrowType.Seeding, // Or Cutting
@@ -53,7 +53,7 @@ public class PlantDemoSystem {
         "Money Plant",
         List.of("Devils Ivy"),
         Season.SPRING,
-        new Date(),
+        LocalDate.now(),
         15,
         1825, 
         GrowType.Cutting,
