@@ -12,6 +12,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 public class PlantView {
+  final static String PLANT_DEFAULT_IMG = "plant.png";
+
   // Widgets
   private Label lbl_plant_name;
   private Label lbl_plant_price;
@@ -51,8 +53,10 @@ public class PlantView {
     // Set dynamic binding on our plant info
     this.lbl_plant_name.textProperty().bind(this.model.name);
     this.lbl_plant_price.textProperty().bind(this.model.price.asString());
-    this.iv.imageProperty().bindBidirectional(this.model.picture);
-    this.iv.setImage(new Image("file:/home/jmd/Media/Pictures/Avatars/default-user.png"));
+    this.iv.imageProperty().bindBidirectional(this.model.picture); 
+
+    // this.getClass().getResource(PLANT_DEFAULT_IMG)
+    // this.iv.setImage(new Image());
 
     vb.setPrefWidth(100);
     vb.setPrefHeight(200);

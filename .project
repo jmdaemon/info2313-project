@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
+<<<<<<< HEAD
 	<name>plant-management-system-project2</name>
+=======
+	<name>plant-management-system</name>
+>>>>>>> 981580a (Change plant picture)
 	<comment>Project project2 created by Buildship.</comment>
 	<projects>
 	</projects>
@@ -16,7 +20,11 @@
 	</natures>
 	<filteredResources>
 		<filter>
+<<<<<<< HEAD
 			<id>1744400732223</id>
+=======
+			<id>1744356768092</id>
+>>>>>>> 981580a (Change plant picture)
 			<name></name>
 			<type>30</type>
 			<matcher>
