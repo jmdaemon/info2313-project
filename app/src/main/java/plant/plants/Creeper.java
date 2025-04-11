@@ -10,6 +10,8 @@ public class Creeper extends AbstractPlant {
     super(plant);
     this.color = color;
   }
+  public String getColor() { return this.color; }
+  public void setColor(final String color) { this.color = color; }
   
   @Override public String staking() {
     return "Install trellises/arbors 20-30 cm away from the walls allowing for good air circulation";

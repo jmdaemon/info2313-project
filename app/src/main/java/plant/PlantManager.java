@@ -4,9 +4,12 @@ import java.io.File;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
+import java.util.StringTokenizer;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import data.Data;
 import plant.plants.Creeper;
@@ -168,6 +171,22 @@ public class PlantManager {
           plant.info.grow_instructions,
           plant.info.plant_type
       );
+      
+    switch(plant.info.plant_type) {
+        case TREE -> {
+          Tree tree = (Tree) plant;
+          line += "|" + String.valueOf(tree.getHeight());
+        }
+        case HERB -> {
+          Herb herb = (Herb) plant;
+          line += "|" + String.valueOf(herb.getTaste());
+        }
+        case CREEPER -> {
+          Creeper creeper = (Creeper) plant;
+          line += "|" + String.valueOf(creeper.getColor());
+        }
+      }
+      
       return line;
   }
 
@@ -177,34 +196,31 @@ public class PlantManager {
 
     // Read data to memory
     List<String> lines = Library.read_buf(fp, Data.ERROR_FILE_READ);
-    System.out.println(lines.get(0));
+    
 
     // Parse data
     for (String line : lines) {
-      // Parse each line into plant data
+      // Ignore blank lines
+      if (line.isBlank())
+        continue;
 
-      // String[] split = line.split("|");
-      String[] split = line.split("|");
-      System.out.println(split[0]);
+      List<String> tokens = Collections.list(new StringTokenizer(line, "|")).stream()
+        .map(token -> (String) token)
+        .collect(Collectors.toList());
+      System.out.println(tokens.get(0).toString());
       
-      // TODO: Assume the data read is correct
-      final String name = split[0];
-      final List<String> names = List.of(split[1].split(","));
-      final Season pot_time = Season.toSeason(split[2]);
+      final String name = tokens.get(0);
+      final List<String> names = List.of(tokens.get(1).split(","));
+      final Season pot_time = Season.toSeason(tokens.get(2));
 
       DateTimeFormatter fmt = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-      // System.out.println(split[0]);
-      // System.out.println(split[1]);
-      // System.out.println(split[2]);
-      // System.out.println(split[3]);
-      // System.out.println(split[h]);
-      final LocalDate pot_date = LocalDate.parse(split[3], fmt);
+      final LocalDate pot_date = LocalDate.parse(tokens.get(3), fmt);
 
-      final double price = Double.valueOf(split[4]);
-      final int lifespan = Integer.valueOf(split[5]);
-      final GrowType grow_method = GrowType.valueOf(split[6]);
-      final String grow_instructions = split[7];
-      final PlantType plant_type = PlantType.valueOf(split[8].toUpperCase());
+      final double price = Double.valueOf(tokens.get(4));
+      final int lifespan = Integer.valueOf(tokens.get(5));
+      final GrowType grow_method = GrowType.valueOf(tokens.get(6));
+      final String grow_instructions = tokens.get(7);
+      final PlantType plant_type = PlantType.valueOf(tokens.get(8).toUpperCase());
 
       final PlantInfo plant_info = new PlantInfo(name, names, pot_time, pot_date,
           price, lifespan, grow_method,
@@ -213,19 +229,19 @@ public class PlantManager {
       AbstractPlant plant = null;
       switch(plant_type) {
         case TREE -> {
-          final double height = Double.valueOf(split[9]);
+          final double height = Double.valueOf(tokens.get(9));
           plant = new Tree(plant_info, height);
         }
         case HERB -> {
-          final String taste = split[9];
+          final String taste = tokens.get(9);
           plant = new Herb(plant_info, taste);
         }
         case CREEPER -> {
-          final String color = split[9];
+          final String color = tokens.get(9);
           plant = new Creeper(plant_info, color);
         }
         default -> {
-          // ERROR OUT
+          // TODO: ERROR OUT
         }
       }
       loaded.add(plant);
