@@ -2,12 +2,15 @@ package plant;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Scanner;
 
 import plant.plants.Creeper;
 import plant.plants.Herb;
 import plant.plants.Tree;
 
 public class PlantDemoSystem {
+  final static String FP_PLANT_DATA = "plant.psv";
+
   public static void showPlantDetails(final AbstractPlant p) {
     System.out.println(p.info.name);
     System.out.println("=".repeat(16));
@@ -62,9 +65,39 @@ public class PlantDemoSystem {
       ),
       "Red"
     );
+
+    PlantManager pm = new PlantManager();
+
+    pm.add(appleTree);
+    pm.add(basil);
+    pm.add(money_plant);
     
-    showPlantDetails(appleTree);
-    showPlantDetails(basil);
-    showPlantDetails(money_plant);
+    // Show all plants
+    for (AbstractPlant plant : pm.getPlants()) 
+      showPlantDetails(plant);
+
+    // Save Plants
+    Scanner reader = new Scanner(System.in);
+
+    pm.save(FP_PLANT_DATA, reader);
+    pm.load(FP_PLANT_DATA, reader);
+
+    // Show all plants
+    System.out.println("After loading plant data:");
+    for (AbstractPlant plant : pm.getPlants()) 
+      showPlantDetails(plant);
+
+    // Filter plants to show only tree
+    // pm.filter(p -> p.info.plant_type == PlantType.TREE);
+    List<AbstractPlant> results = pm.search(PlantType.TREE);
+    for (AbstractPlant plant : results) 
+      showPlantDetails(plant);
+
+    // Delete tree & show plants
+    pm.del(0);
+    for (AbstractPlant plant : results) 
+      showPlantDetails(plant);
+
+    reader.close();
   }
 }

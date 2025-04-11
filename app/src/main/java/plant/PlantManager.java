@@ -17,6 +17,10 @@ import utils.Library;
 public class PlantManager {
   private List<AbstractPlant> plants;
 
+  public PlantManager() {
+    this.plants = new ArrayList<AbstractPlant>();
+  }
+
   //  API: //
   // <===> //
   public List<AbstractPlant> getPlants() { return this.plants; }
@@ -58,6 +62,7 @@ public class PlantManager {
       System.exit(Data.ERROR_FAILURE);
     } else {
       try {
+        data.delete();
         data.createNewFile();
       } catch (Exception e) {
         e.printStackTrace();
@@ -66,8 +71,9 @@ public class PlantManager {
     // Serialize plant data and save to disk
     // Format plants
     String[] lines = new String[this.plants.size()];
-    for (int i = 0; i < this.plants.size(); i++)
-      lines[i] = this.format(this.plants.get(i));
+    for (int i = 0; i < this.plants.size(); i++) {
+      lines[i] = this.format(this.plants.get(i)) + "\n";
+    }
 
     // Save data to disk
     Library.write_buf(fp, lines, Data.ERROR_FILE_WRITE);
@@ -85,7 +91,6 @@ public class PlantManager {
       if (data.exists()) {
         System.out.println("Plant save data already exists.");
         System.out.print("Overwrite plant save data? [yes/no]: ");
-        System.out.println();
         choice = reader.next();
         reader.nextLine(); // Skip newline char
       }
@@ -172,26 +177,34 @@ public class PlantManager {
 
     // Read data to memory
     List<String> lines = Library.read_buf(fp, Data.ERROR_FILE_READ);
+    System.out.println(lines.get(0));
 
     // Parse data
     for (String line : lines) {
       // Parse each line into plant data
 
+      // String[] split = line.split("|");
       String[] split = line.split("|");
+      System.out.println(split[0]);
       
       // TODO: Assume the data read is correct
       final String name = split[0];
       final List<String> names = List.of(split[1].split(","));
-      final Season pot_time = Season.valueOf(split[2]);
+      final Season pot_time = Season.toSeason(split[2]);
 
-      DateTimeFormatter fmt = DateTimeFormatter.ofPattern("uuuu-MM-dd");
+      DateTimeFormatter fmt = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+      // System.out.println(split[0]);
+      // System.out.println(split[1]);
+      // System.out.println(split[2]);
+      // System.out.println(split[3]);
+      // System.out.println(split[h]);
       final LocalDate pot_date = LocalDate.parse(split[3], fmt);
 
       final double price = Double.valueOf(split[4]);
       final int lifespan = Integer.valueOf(split[5]);
       final GrowType grow_method = GrowType.valueOf(split[6]);
       final String grow_instructions = split[7];
-      final PlantType plant_type = PlantType.valueOf(split[8]);
+      final PlantType plant_type = PlantType.valueOf(split[8].toUpperCase());
 
       final PlantInfo plant_info = new PlantInfo(name, names, pot_time, pot_date,
           price, lifespan, grow_method,
