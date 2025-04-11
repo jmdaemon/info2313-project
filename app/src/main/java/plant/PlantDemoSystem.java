@@ -73,6 +73,7 @@ public class PlantDemoSystem {
     pm.add(money_plant);
     
     // Show all plants
+    System.out.println("# Showing all plants:");
     for (AbstractPlant plant : pm.getPlants()) 
       showPlantDetails(plant);
 
@@ -83,17 +84,19 @@ public class PlantDemoSystem {
     pm.load(FP_PLANT_DATA, reader);
 
     // Show all plants
-    System.out.println("After loading plant data:");
+    System.out.println("# After loading plant data:");
     for (AbstractPlant plant : pm.getPlants()) 
       showPlantDetails(plant);
 
     // Filter plants to show only tree
     // pm.filter(p -> p.info.plant_type == PlantType.TREE);
+    System.out.println("# Filter for tree plants only:");
     List<AbstractPlant> results = pm.search(PlantType.TREE);
     for (AbstractPlant plant : results) 
       showPlantDetails(plant);
 
     // Delete tree & show plants
+    System.out.println("# Delete tree plant:");
     pm.del(0);
     for (AbstractPlant plant : results) 
       showPlantDetails(plant);
