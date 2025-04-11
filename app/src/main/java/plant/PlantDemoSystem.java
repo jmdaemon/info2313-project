@@ -96,9 +96,13 @@ public class PlantDemoSystem {
       showPlantDetails(plant);
 
     // Delete tree & show plants
+    // System.out.println("# Reloading plant data:");
+    // pm.load(FP_PLANT_DATA, reader);
     System.out.println("# Delete tree plant:");
     pm.del(0);
-    for (AbstractPlant plant : results) 
+
+    // Now show the plants
+    for (AbstractPlant plant : pm.getPlants()) 
       showPlantDetails(plant);
 
     reader.close();
