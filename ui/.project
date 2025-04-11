@@ -10,20 +10,20 @@
 			<arguments>
 			</arguments>
 		</buildCommand>
-		<buildCommand>
-			<name>org.eclipse.buildship.core.gradleprojectbuilder</name>
-			<arguments>
-			</arguments>
-		</buildCommand>
 	</buildSpec>
 	<natures>
 		<nature>org.eclipse.jdt.core.javanature</nature>
-		<nature>org.eclipse.buildship.core.gradleprojectnature</nature>
 	</natures>
+<<<<<<< HEAD
 <<<<<<< HEAD
 	<filteredResources>
 		<filter>
 			<id>1744406117221</id>
+=======
+	<filteredResources>
+		<filter>
+			<id>1744408522495</id>
+>>>>>>> 1d083c4 (S)
 			<name></name>
 			<type>30</type>
 			<matcher>
@@ -32,6 +32,9 @@
 			</matcher>
 		</filter>
 	</filteredResources>
+<<<<<<< HEAD
 =======
 >>>>>>> 5d767c5 (S)
+=======
+>>>>>>> 1d083c4 (S)
 </projectDescription>
