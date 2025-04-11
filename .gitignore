@@ -2,6 +2,8 @@
 hw
 examples/*
 
+*/*.psv
+
 */*.zip
 
 # Ignore Gradle project-specific cache directory
