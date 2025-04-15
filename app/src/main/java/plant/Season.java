@@ -21,10 +21,10 @@ public enum Season {
 
   public static Season toSeason(String season) {
     switch(season) {
-      case "winter" -> { return WINTER; }
-      case "spring" -> { return SPRING; }
-      case "summer" -> { return SUMMER; }
-      case "fall" -> { return FALL; }
+      case "winter" -> { return Season.WINTER; }
+      case "spring" -> { return Season.SPRING; }
+      case "summer" -> { return Season.SUMMER; }
+      case "fall" -> { return Season.FALL; }
     }
     return NONE;
     // return WINTER;

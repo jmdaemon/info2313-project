@@ -20,12 +20,13 @@ import utils.Library;
 public class PlantManager {
   private List<AbstractPlant> plants;
 
+  //  API: //
+  // <===> //
+
   public PlantManager() {
     this.plants = new ArrayList<AbstractPlant>();
   }
 
-  //  API: //
-  // <===> //
   public List<AbstractPlant> getPlants() { return this.plants; }
   public void setPlants(List<AbstractPlant> plants) { this.plants = plants; }
 
@@ -157,37 +158,39 @@ public class PlantManager {
     return results;
   }
 
-  // Internal
+  // Internal //
+  // <======> //
+
   private String format(AbstractPlant plant) {
-			String line = String.format(
-          "%s|%s|%s|%s|%s|%d|%s|%s|%s",
-          plant.info.name,
-          plant.info.alt_names,
-          plant.info.pot_time.toString(),
-          plant.info.pot_date.toString(),
-          plant.info.price,
-          plant.info.lifespan,
-          plant.info.grow_method.toString(),
-          plant.info.grow_instructions,
-          plant.info.plant_type
-      );
-      
+    String line = String.format(
+      "%s|%s|%s|%s|%s|%d|%s|%s|%s",
+      plant.info.name,
+      plant.info.alt_names,
+      plant.info.pot_time.toString(),
+      plant.info.pot_date.toString(),
+      plant.info.price,
+      plant.info.lifespan,
+      plant.info.grow_method.toString(),
+      plant.info.grow_instructions,
+      plant.info.plant_type
+    );
+    
     switch(plant.info.plant_type) {
-        case TREE -> {
-          Tree tree = (Tree) plant;
-          line += "|" + String.valueOf(tree.getHeight());
-        }
-        case HERB -> {
-          Herb herb = (Herb) plant;
-          line += "|" + String.valueOf(herb.getTaste());
-        }
-        case CREEPER -> {
-          Creeper creeper = (Creeper) plant;
-          line += "|" + String.valueOf(creeper.getColor());
-        }
+      case TREE -> {
+        Tree tree = (Tree) plant;
+        line += "|" + String.valueOf(tree.getHeight());
       }
+      case HERB -> {
+        Herb herb = (Herb) plant;
+        line += "|" + String.valueOf(herb.getTaste());
+      }
+      case CREEPER -> {
+        Creeper creeper = (Creeper) plant;
+        line += "|" + String.valueOf(creeper.getColor());
+      }
+    }
       
-      return line;
+    return line;
   }
 
   // Parse data into plant data

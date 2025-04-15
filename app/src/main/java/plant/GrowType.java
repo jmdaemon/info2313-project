@@ -2,12 +2,20 @@ package plant;
 
 public enum GrowType {
   None("none"),
+  Seeding("seeding"),
+  Cutting("cutting"),
+  Division("division"),
+  Layering("layering"),
+  Grafting("grafting"),
+  Budding("budding");
+  /*
   Seeding("Seeding"),
   Cutting("Cutting"),
   Division("Division"),
   Layering("Layering"),
   Grafting("Grafting"),
   Budding("Budding");
+  */
 
   String value;
   GrowType(String value) { this.value = value; }
