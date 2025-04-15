@@ -1,6 +1,7 @@
 package plant;
 
 public enum Season {
+  NONE("none"),
   WINTER("winter"),
   SPRING("spring"),
   SUMMER("summer"), 
@@ -25,7 +26,8 @@ public enum Season {
       case "summer" -> { return SUMMER; }
       case "fall" -> { return FALL; }
     }
-    return WINTER;
+    return NONE;
+    // return WINTER;
       // default -> { return NONE; }
   }
   // }

@@ -1,4 +1,6 @@
 package app;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -8,8 +10,14 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import plant.AbstractPlant;
+import plant.GrowType;
+import plant.PlantInfo;
 import plant.PlantManager;
 import plant.PlantType;
+import plant.Season;
+import plant.plants.Creeper;
+import plant.plants.Herb;
+import plant.plants.Tree;
 
 public class App {
   final static String FP_PLANT_DATA = "plant.psv";
@@ -147,6 +155,92 @@ public class App {
         case ADD -> {
           // TODO: Get user input to add new plant
 
+          // Prompt for plant name
+          System.out.println("Plant Name: ");
+          String name = reader.next();
+          reader.nextLine(); // Flush line
+
+          System.out.println("Other Names: ");
+          String names = reader.next();
+          reader.nextLine(); // Flush line
+
+          String maybe_season = null;
+          while(true) {
+            System.out.println("Potting Season: ");
+            maybe_season = reader.nextLine();
+            if (!input.isEmpty() && (Season.toSeason(maybe_season) != Season.NONE))
+              break;
+          }
+          Season season = Season.toSeason(maybe_season);
+
+          // Try to parse a date
+          String maybe_pot_date = null;
+          while(true) {
+            System.out.println("Potting Date: ");
+            maybe_pot_date = reader.nextLine();
+            if (!input.isEmpty())
+              break;
+          }
+          DateTimeFormatter fmt = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+          LocalDate pot_date = LocalDate.parse(maybe_pot_date, fmt);
+
+          double price = -1.0;
+          while(true) {
+            System.out.println("Price: ");
+            price = reader.nextDouble();
+            if (price <= 0)
+              break;
+          }
+
+          int lifespan = -1;
+          while(true) {
+            System.out.println("Lifespan : ");
+            lifespan = reader.nextInt();
+            if (lifespan <= 0)
+              break;
+          }
+
+          String maybe_grow_method = null;
+          while(true) {
+            System.out.println("Grow Method: ");
+            maybe_grow_method  = reader.nextLine();
+            if (!input.isEmpty() && (GrowType.toGrowType(maybe_grow_method) != GrowType.None))
+              break;
+          }
+          GrowType grow_method = GrowType.toGrowType(maybe_grow_method);
+
+          String grow_instructions = "";
+          System.out.println("Special Growing Instructions: ");
+          String line = null;
+          while (!line.equals("END")) {
+            line = reader.nextLine();
+            grow_instructions += line;
+          }
+
+          // Get Plant Type
+          PlantType plant_type = PlantType.TREE;
+
+          PlantInfo info = new PlantInfo(
+              name,
+              List.of(names.split(",")),
+              season,
+              pot_date,
+              price,
+              lifespan,
+              grow_method,
+              grow_instructions,
+              plant_type
+          );
+          
+        // Prompt for extra data based on plant type
+          AbstractPlant plant = null;
+          switch(plant_type) {
+            case TREE -> { plant = new Tree(info, 120.0); }
+            case HERB -> { plant = new Herb(info, "Aromatic"); }
+            case CREEPER -> { plant = new Creeper(info, "Red"); }
+          }
+          
+          pm.add(plant);
         }
         case DEL -> {
           System.out.println("# Delete tree plant:");
