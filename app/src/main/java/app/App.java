@@ -21,6 +21,8 @@ import plant.plants.Creeper;
 import plant.plants.Herb;
 import plant.plants.Tree;
 
+import utils.Menu;
+
 public class App {
   final static String FP_PLANT_DATA = "plant.psv";
 
