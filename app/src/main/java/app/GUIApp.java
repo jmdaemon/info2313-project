@@ -1,11 +1,8 @@
-package plant;
+package app;
 import ui.GUI;
 
-public class App {
+public class GUIApp {
     public static void main(String[] args) {
-      System.out.println("Initial Project");
-      PlantDemoSystem.main(args);
-
       GUI app = new GUI();
       app.run(args);
     }

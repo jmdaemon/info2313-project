@@ -29,6 +29,15 @@ javafx {
     modules = [ 'javafx.controls', 'javafx.fxml', 'javafx.web' ]
 }
 
+task('demo', dependsOn: 'classes', type: JavaExec) {
+    group 'Application'
+    description 'Run the plant demo application'
+    main = 'app.PlantDemoSystem'
+    classpath = sourceSets.main.runtimeClasspath
+
+    standardInput = System.in
+}
+
 task('cli-app', dependsOn: 'classes', type: JavaExec) {
     group 'Application'
     description 'Run the plant manager cli application'
@@ -38,10 +47,10 @@ task('cli-app', dependsOn: 'classes', type: JavaExec) {
     standardInput = System.in
 }
 
-task('demo', dependsOn: 'classes', type: JavaExec) {
+task('gui-app', dependsOn: 'classes', type: JavaExec) {
     group 'Application'
-    description 'Run the plant demo application'
-    main = 'app.PlantDemoSystem'
+    description 'Run the plant manager gui application'
+    main = 'app.GUIApp'
     classpath = sourceSets.main.runtimeClasspath
 
     standardInput = System.in
