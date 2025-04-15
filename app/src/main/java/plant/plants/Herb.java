@@ -10,6 +10,7 @@ public class Herb extends AbstractPlant {
     super(plant);
     this.taste = taste;
   }
+
   public String getTaste() { return this.taste; }
   public void setTaste(final String taste) { this.taste = taste; }
 

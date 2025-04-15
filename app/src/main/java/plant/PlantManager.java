@@ -197,7 +197,6 @@ public class PlantManager {
     // Read data to memory
     List<String> lines = Library.read_buf(fp, Data.ERROR_FILE_READ);
     
-
     // Parse data
     for (String line : lines) {
       // Ignore blank lines
@@ -207,7 +206,6 @@ public class PlantManager {
       List<String> tokens = Collections.list(new StringTokenizer(line, "|")).stream()
         .map(token -> (String) token)
         .collect(Collectors.toList());
-      System.out.println(tokens.get(0).toString());
       
       final String name = tokens.get(0);
       final List<String> names = List.of(tokens.get(1).split(","));
