@@ -16,7 +16,7 @@ dependencies {
 
 application {
     // Define the main class for the application.
-    mainClass = 'app.App'
+    mainClass = 'app.ConsoleApp'
 }
 
 run {
@@ -27,4 +27,22 @@ javafx {
     // version = "21"
     version = "17.0.8"
     modules = [ 'javafx.controls', 'javafx.fxml' ]
+}
+
+task('cli-app', dependsOn: 'classes', type: JavaExec) {
+    group 'Application'
+    description 'Run the plant manager cli application'
+    main = 'app.ConsoleApp'
+    classpath = sourceSets.main.runtimeClasspath
+
+    standardInput = System.in
+}
+
+task('demo', dependsOn: 'classes', type: JavaExec) {
+    group 'Application'
+    description 'Run the plant demo application'
+    main = 'app.PlantDemoSystem'
+    classpath = sourceSets.main.runtimeClasspath
+
+    standardInput = System.in
 }

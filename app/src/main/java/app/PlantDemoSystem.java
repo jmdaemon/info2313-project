@@ -1,4 +1,4 @@
-package plant;
+package app;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -95,15 +95,12 @@ public class PlantDemoSystem {
       showPlantDetails(plant);
 
     // Filter plants to show only tree
-    // pm.filter(p -> p.info.plant_type == PlantType.TREE);
     System.out.println("# Filter for tree plants only:");
     List<AbstractPlant> results = pm.search(PlantType.TREE);
     for (AbstractPlant plant : results) 
       showPlantDetails(plant);
 
     // Delete tree & show plants
-    // System.out.println("# Reloading plant data:");
-    // pm.load(FP_PLANT_DATA, reader);
     System.out.println("# Delete tree plant:");
     pm.del(0);
 

@@ -1,15 +1,10 @@
 package app;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.Scanner;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
 import plant.AbstractPlant;
 import plant.GrowType;
@@ -20,25 +15,22 @@ import plant.Season;
 import plant.plants.Creeper;
 import plant.plants.Herb;
 import plant.plants.Tree;
-
 import utils.Menu;
+import utils.Prompt;
 
-public class App {
+public class ConsoleApp {
   final static String FP_PLANT_DATA = "plant.psv";
 
   final static String TITLE_OPTIONS = "Options:";
 
   // Main Functions
   public static void addPlants(final PlantManager pm, final Scanner reader, final boolean indent) {
-    // TODO: Get user input to add new plant
-
-    String name = promptLine("Plant Name: ", reader);
-    String names = promptLine("Other Names: ", reader);
+    String name = Prompt.promptLine("Plant Name: ", reader);
+    String names = Prompt.promptLine("Other Names: ", reader);
 
     // Prompt Choices
-    Season season = Season.toSeason(promptChoiceUnchecked("Potting Season: ", reader, indent,
+    Season season = Season.toSeason(Prompt.promptChoiceUnchecked("Potting Season: ", reader, indent,
         s -> Season.toSeason(s.toUpperCase()) != Season.NONE));
-        // s -> Season.toSeason(s) != Season.NONE));
 
     // Try to parse a date
     String maybe_pot_date = null;
@@ -51,17 +43,15 @@ public class App {
     DateTimeFormatter fmt = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     LocalDate pot_date = LocalDate.parse(maybe_pot_date, fmt);
 
-    double price = promptDouble("Price: ", reader);
+    double price = Prompt.promptDouble("Price: ", reader);
 
-    int lifespan = promptInt("Lifespan: ", reader);
+    int lifespan = Prompt.promptInt("Lifespan: ", reader);
 
     reader.nextLine(); // Skip line
-    GrowType grow_method = GrowType.toGrowType(promptChoiceUnchecked("Grow Method: ", reader, indent,
+    GrowType grow_method = GrowType.toGrowType(Prompt.promptChoiceUnchecked("Grow Method: ", reader, indent,
           gt -> GrowType.toGrowType(gt.toUpperCase()) != GrowType.None));
-          // gt -> GrowType.valueOf(gt.toUpperCase()) != GrowType.None));
-          // gt -> GrowType.toGrowType(gt) != GrowType.None));
 
-    String grow_instructions = promptMultiLine("Special Growing Instructions: ", "END", reader);
+    String grow_instructions = Prompt.promptMultiLine("Special Growing Instructions: ", "END", reader);
 
     // Get Plant Type
     PlantType plant_type = getPlantType("Plant Type: ", reader);
@@ -82,15 +72,15 @@ public class App {
     AbstractPlant plant = null;
     switch(plant_type) {
       case TREE -> {
-        double height = promptDouble("Height: ", reader);
+        double height = Prompt.promptDouble("Height: ", reader);
         plant = new Tree(info, height);
       }
       case HERB -> {
-        String taste = promptWord("Taste: ", reader);
+        String taste = Prompt.promptWord("Taste: ", reader);
         plant = new Herb(info, taste);
       }
       case CREEPER -> {
-        String color = promptWord("Color: ", reader);
+        String color = Prompt.promptWord("Color: ", reader);
         plant = new Creeper(info, color);
       }
     }
@@ -189,7 +179,7 @@ public class App {
 
     // Choose a plant
     List<String> options = plants.stream().map(p -> p.info.name).collect(Collectors.toList());
-    return promptChoice("Select a plant:", options, reader, indent);
+    return Prompt.promptChoice("Select a plant:", options, reader, indent);
   }
 
   public static PlantType getPlantType(final String prompt, final Scanner reader) {
@@ -216,85 +206,6 @@ public class App {
     return ptype;
   }
 
-  public static int promptChoice(final String prompt, final List<String> options, final Scanner reader, final boolean indent) {
-    final int min = 1;
-    final int max = options.size();
-
-    int choice = -1;
-    do {
-      System.out.print(prompt);
-      System.out.println();
-      for (int i = 0, opt = 0; i < max; i++, opt = i + 1) 
-        System.out.printf("%s%d) %s\n", Menu.setIndent(indent), opt, options.get(i));
-        
-      choice = reader.nextInt();
-    } while ((choice >= min) && (choice <= max));
-    return choice;
-  }
-
-  public static String promptChoiceUnchecked(
-      final String prompt,
-      final Scanner reader,
-      final boolean indent,
-      final Predicate<String> pred
-    ) {
-    String input = "";
-    do {
-      System.out.print(prompt);
-      input = reader.nextLine();
-    } while(!input.isEmpty() && pred.test(input));
-    return input;
-  }
-
-  public static String promptWord(final String prompt, final Scanner reader) {
-    String input = "";
-    do {
-      System.out.print(prompt);
-      input = reader.nextLine();
-    } while(input.isEmpty());
-    return input;
-  }
-
-  public static String promptLine(final String prompt, final Scanner reader) {
-    String input = "";
-    do {
-      System.out.print(prompt);
-      input = reader.next();
-      reader.nextLine(); // Flush line
-    } while(input.isEmpty());
-    return input;
-  }
-
-  public static String promptMultiLine(final String prompt, final String end, final Scanner reader) {
-    String input = "";
-    String line = "";
-    System.out.print(prompt);
-    do {
-      line = reader.nextLine();
-      if (line.equals(end))
-        break;
-      input += line;
-    } while (!line.equals(end));
-    return input;
-  }
-
-  public static double promptDouble(final String prompt, final Scanner reader) {
-    double input = -1.0;
-    do {
-      System.out.print(prompt);
-      input = reader.nextDouble();
-    } while (input <= 0.0);
-    return input;
-  }
-
-  public static int promptInt(final String prompt, final Scanner reader) {
-    int input = -1;
-    do {
-      System.out.print(prompt);
-      input = reader.nextInt();
-    } while (input <= 0);
-    return input;
-  }
   
   public static void main(String[] args) {
     Scanner reader = new Scanner(System.in);
