@@ -212,14 +212,14 @@ public class PlantManager {
       
       final String name = tokens.get(0);
       final List<String> names = List.of(tokens.get(1).split(","));
-      final Season pot_time = Season.toSeason(tokens.get(2));
+      final Season pot_time = Season.fromString(tokens.get(2));
 
       DateTimeFormatter fmt = DateTimeFormatter.ofPattern("yyyy-MM-dd");
       final LocalDate pot_date = LocalDate.parse(tokens.get(3), fmt);
 
       final double price = Double.valueOf(tokens.get(4));
       final int lifespan = Integer.valueOf(tokens.get(5));
-      final GrowType grow_method = GrowType.valueOf(tokens.get(6));
+      final GrowType grow_method = GrowType.fromString(tokens.get(6));
       final String grow_instructions = tokens.get(7);
       final PlantType plant_type = PlantType.valueOf(tokens.get(8).toUpperCase());
 

@@ -1,11 +1,13 @@
-package ui;
+package ui.components;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -19,7 +21,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
+import javafx.stage.Stage;
+
 import plant.AbstractPlant;
 import plant.GrowType;
 import plant.PlantInfo;
@@ -28,6 +31,8 @@ import plant.Season;
 import plant.plants.Creeper;
 import plant.plants.Herb;
 import plant.plants.Tree;
+
+import ui.Component;
 
 public class PlantForm implements Component {
   private GridPane gp;
@@ -59,56 +64,49 @@ public class PlantForm implements Component {
   private TextArea ta_grow_instructions;
   private Button btn_submit;
 
-  // Multi Control
-  // We have to make sure we can get input from
+  // Specific Plant Control Types
+  // Additional fields to read user input for specific plant types
   private Label lbl_plant_extra;
   private TextField tf_plant_extra;
 
+  // public ObservableList<AbstractPlant> data;
+  public ObjectProperty<AbstractPlant> data;
+
   // Add
   public PlantForm() {
-    // Initialize all controls
-    createLabels();
-    createControls();
-
+    this.createLabels();
+    this.createControls();
     this.btn_submit.setText("Submit");
-    packControls();
-    setupListeners();
+    this.packControls();
+    this.setupListeners();
   }
 
   // Edit:
   public PlantForm(AbstractPlant plant) {
-    createLabels();
-    createControls();
+    this.createLabels();
+    this.createControls();
 
     this.btn_submit.setText("Done");
 
     // Fill controls with information from our plant
-    this.tf_name.setText(plant.info.name);
-    this.tf_names.setText(plant.info.alt_names
-        .stream().collect(Collectors.joining(",")));
-    this.cb_plant_type.getSelectionModel().select(plant.info.plant_type.toString());;
-    this.cb_pot_season.getSelectionModel().select(plant.info.pot_time.toString());
-    this.dp_pot_date.setValue(plant.info.pot_date);
-    this.tf_price.setText(String.valueOf(plant.info.price));
-    this.tf_lifespan.setText(String.valueOf(plant.info.lifespan));
-    this.cb_pot_season.getSelectionModel().select(plant.info.grow_method.toString());
-    this.ta_grow_instructions.setText(plant.info.grow_instructions);
+    this.fillLabels(plant.info);
 
     // Set labels & fill extra plant details
     this.setExtraPlantControls(plant.info.plant_type.toString());
 
+    // Fill labels for extra plant details
     switch(plant.info.plant_type) {
-      case TREE:  {
+      case TREE -> {
         Tree tree = (Tree) plant;
         final double height = tree.getHeight();
         this.tf_plant_extra.setText(String.valueOf(height));
       }
-      case HERB: {
+      case HERB -> {
         Herb herb = (Herb) plant;
         final String taste = herb.getTaste();
         this.tf_plant_extra.setText(taste);
       }
-      case CREEPER: {
+      case CREEPER -> {
         Creeper creeper = (Creeper) plant;
         final String color = creeper.getColor();
         this.tf_plant_extra.setText(color);
@@ -116,8 +114,8 @@ public class PlantForm implements Component {
     }
     
     // Packing
-    packControls();
-    setupListeners();
+    this.packControls();
+    this.setupListeners();
   }
 
   // Internal
@@ -145,6 +143,19 @@ public class PlantForm implements Component {
     }
   }
 
+  // Fill labels with plant info
+  private void fillLabels(final PlantInfo info) {
+    this.tf_name.setText(info.name);
+    this.tf_names.setText(info.alt_names.stream().collect(Collectors.joining(",")));
+    this.cb_plant_type.getSelectionModel().select(info.plant_type.toString());;
+    this.cb_pot_season.getSelectionModel().select(info.pot_time.toString());
+    this.dp_pot_date.setValue(info.pot_date);
+    this.tf_price.setText(String.valueOf(info.price));
+    this.tf_lifespan.setText(String.valueOf(info.lifespan));
+    this.cb_pot_season.getSelectionModel().select(info.grow_method.toString());
+    this.ta_grow_instructions.setText(info.grow_instructions);
+  }
+
   private void createControls() {
     this.tf_name = new TextField();
     this.tf_names = new TextField();
@@ -163,11 +174,32 @@ public class PlantForm implements Component {
     this.tf_lifespan.setPromptText("e.g 7200");
 
     this.cb_plant_type.setPromptText("Choose a plant type.");
+
+    this.cb_plant_type.getItems().addAll(
+        // "Tree", "Herb", "Creeper"
+        enumToLabels(Stream.of(PlantType.values()).map(s -> s.toString()).toList())
+    );
+
     this.cb_pot_season.setPromptText("Select the best season for planting.");
+    this.cb_pot_season.getItems().addAll(
+      // "Winter", "Spring", "Summer", "Fall"
+        enumToLabels(Stream.of(Season.values()).map(s -> s.toString()).toList())
+    );
+
     this.cb_grow_method.setPromptText("Select a method of growing");
+    this.cb_grow_method.getItems().addAll(
+      // "Seeding", "Cutting", "Layering", "Grafting", "Budding"
+        enumToLabels(Stream.of(GrowType.values()).map(s -> s.toString()).toList())
+    );
 
     this.dp_pot_date.setPromptText("Select the best date for planting.");
     this.ta_grow_instructions.setPromptText("Note any extra special growing instructions here.");
+
+    this.tf_plant_extra = new TextField();
+    this.data = new SimpleObjectProperty<AbstractPlant>();
+    // this.data = FXCollections.observableArrayList();
+    // this.data = new ObjectProperty<AbstractPlant>();
+
   }
 
   private void packControls() {
@@ -188,13 +220,13 @@ public class PlantForm implements Component {
     this.gp.addRow(3, this.lbl_pot_season , this.cb_pot_season);
     this.gp.addRow(4, this.lbl_pot_date, this.dp_pot_date);
     this.gp.addRow(5, this.lbl_price, this.tf_price);
-    this.gp.addRow(6, this.lbl_grow_method, this.cb_grow_method);
-    this.gp.addRow(7, this.lbl_grow_instructions, this.ta_grow_instructions);
-    this.gp.addRow(8, this.btn_submit);
+    this.gp.addRow(6, this.lbl_lifespan, this.tf_lifespan);
+    this.gp.addRow(7, this.lbl_grow_method, this.cb_grow_method);
+    this.gp.addRow(8, this.lbl_grow_instructions, this.ta_grow_instructions);
+    this.gp.addRow(9, this.lbl_plant_extra, this.tf_plant_extra);
+    this.gp.addRow(10, this.btn_submit);
 
     this.btn_submit.setAlignment(Pos.CENTER_RIGHT);
-
-
   }
 
   private void setupListeners() {
@@ -208,13 +240,16 @@ public class PlantForm implements Component {
 
     // Read the form info, check validity, and set plant data in parent
     this.btn_submit.setOnMouseClicked(event -> {
+      // Get plant data
       final AbstractPlant plant = getPlant();
 
-      // TODO: Watch for the change
-      // Set data in parent
-      this.gp.getParent().setUserData(plant);
+      // Notify subscribers of our plant data
+      this.data.set(plant);
+      // this.data.add(plant);
 
-      // TODO: Close this window
+      // Close the dialog window
+      Stage stage = (Stage) this.btn_submit.getScene().getWindow();
+      stage.close();
     });
   }
 
@@ -224,9 +259,9 @@ public class PlantForm implements Component {
     final String name = this.tf_name.getText();
     final List<String> names = List.of(this.tf_names.getText().split(","));
 
-    final PlantType p_type = PlantType.valueOf(this.cb_plant_type.getSelectionModel().getSelectedItem().toString());
-    final Season pot_time = Season.valueOf(this.cb_pot_season.getSelectionModel().getSelectedItem().toString());
-    final GrowType grow_method = GrowType.valueOf(this.cb_grow_method.getSelectionModel().getSelectedItem().toString());
+    final PlantType p_type = PlantType.fromString(this.cb_plant_type.getSelectionModel().getSelectedItem());
+    final Season pot_time = Season.fromString(this.cb_pot_season.getSelectionModel().getSelectedItem());
+    final GrowType grow_method = GrowType.fromString(this.cb_grow_method.getSelectionModel().getSelectedItem());
 
     final LocalDate pot_date = this.dp_pot_date.getValue();
 
@@ -260,7 +295,7 @@ public class PlantForm implements Component {
   }
 
   private void setExtraPlantControls(String plant_type) {
-    final PlantType plant = PlantType.valueOf(plant_type);
+    final PlantType plant = PlantType.fromString(plant_type);
     switch(plant) {
       case TREE: {
         this.lbl_plant_extra.setText("Tree Height");
@@ -285,5 +320,13 @@ public class PlantForm implements Component {
   @Override
   public Parent asParent() {
     return this.gp;
+  }
+
+  public static List<String> enumToLabels(List<String> values) {
+    return values.stream().skip(1).map(s -> capitalize(s)).toList();
+  }
+
+  public static String capitalize(final String s) {
+    return s.substring(0, 1).toUpperCase() + s.substring(1);
   }
 }

@@ -16,7 +16,8 @@ dependencies {
 
 application {
     // Define the main class for the application.
-    mainClass = 'app.ConsoleApp'
+    // mainClass = 'app.ConsoleApp'
+    mainClass = 'app.GUIApp'
 }
 
 run {

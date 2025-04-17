@@ -18,6 +18,29 @@ import plant.plants.Creeper;
 import plant.plants.Herb;
 import plant.plants.Tree;
 
+// Features
+
+// Plant Form
+// - Fill in details for plant info
+// Editor
+// - Select plant, and edit details
+// Search
+// - Search plant by type, and view results
+// Load/Save
+// - (OPT) Select file to load/save
+// - Show loaded/saved output. (Saved to file: PATH, Loaded plants: {})
+
+// Widgets:
+
+// Selection:
+// - Editor -> Provide a combo box?
+// - Searching: -> Widget with combo box to search for type
+
+
+// Editor:
+// - Perform Ops (Add, Del, Edit
+// - 
+
 
 // TODO:
 // - Admin Panel
@@ -96,7 +119,7 @@ public class GUI extends Application {
     this.gallery.setNavigateEvent("ol-plant-listing", this.scene, this.detail_view.asParent());
     this.gallery.setNavigateEvent("btn-edit", this.scene, this.editor.asParent());
     this.detail_view.setNavigateEvent("btn-back", this.scene, this.gallery.asParent());
-    // this.editor.setNavigateEvent("btn-add", this.scene, this.gallery.asParent());
+    this.editor.setNavigateEvent("btn-add", this.scene, this.gallery.asParent());
 
     // Set resource on button widgets
     this.detail_view.setResource(this.getClass().getResource(PLANT_PAGE_TMPL));
@@ -122,7 +145,7 @@ public class GUI extends Application {
         LocalDate.now(),
         50,
         7300, 
-        GrowType.Grafting,
+        GrowType.GRAFTING,
         "Plant in full sun with well-drained, fertile soil. Ensure good air circulation to prevent disease",
         PlantType.TREE
       ),
@@ -137,7 +160,7 @@ public class GUI extends Application {
         LocalDate.now(),
         5,
         150, 
-        GrowType.Seeding, // Or Cutting
+        GrowType.SEEDING, // Or Cutting
         "Sow seeds indoors 6-8 weeks before the last frost. Transplant outdoors in full sun after the danger of frost has passed",
         PlantType.HERB
         ),
@@ -152,7 +175,7 @@ public class GUI extends Application {
         LocalDate.now(),
         15,
         1825, 
-        GrowType.Cutting,
+        GrowType.CUTTING,
         "Thrives in indirect sunlight. Can be grown in soil or water",
         PlantType.CREEPER
       ),

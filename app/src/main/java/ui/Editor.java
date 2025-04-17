@@ -3,6 +3,10 @@ package ui;
 import java.util.Arrays;
 import java.util.List;
 
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleListProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.event.Event;
 import javafx.scene.Node;
@@ -21,11 +25,15 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import plant.AbstractPlant;
 import plant.PlantManager;
+import ui.components.PlantForm;
 
 public class Editor {
   // Data
   private PlantManager pm;
   private ObservableList<PlantModel> plants;
+
+  private ObjectProperty<AbstractPlant> plant;
+  // private SimpleListProperty<ObservableList<AbstractPlant>> data;
 
   // Widgets
 
@@ -198,15 +206,24 @@ public class Editor {
     // TableView
 
 
+    this.plant = new SimpleObjectProperty<AbstractPlant>();
 
     setupListeners();
   }
   // Internal
   // private void setupListeners(Scene root) {
   private void setupListeners() {
+
+    // Setup listener to add plants
     this.btn_add.setOnMouseClicked(event -> {
       this.form = new PlantForm();
-      // setupDialog(root, this.form.asParent(), event, "Add a new plant");
+      this.plant.bind(this.form.data);
+      this.plant.addListener((e) -> {
+        AbstractPlant plant = this.plant.get();
+        System.out.println(plant.info.name);
+        this.pm.add(plant);
+      });
+
       setupDialog(this.form.asParent(), event, "Add a new plant");
     });
 
@@ -214,6 +231,7 @@ public class Editor {
       // TODO: Assume we have a plant selected
       // TODO: For now assume we just get the first plant
       AbstractPlant plant = this.pm.getPlants().get(0);
+
       
       // PlantForm form = new PlantForm(plant);
       this.form = new PlantForm(plant);
@@ -239,7 +257,8 @@ public class Editor {
     this.form_dialog = new Scene(dialog);
     this.form_window = new Stage();
     this.form_window.setScene(this.form_dialog);
-    this.form_window.setTitle("Edit an existing plant");
+    // this.form_window.setTitle("Edit an existing plant");
+    this.form_window.setTitle(title);
     this.form_window.initModality(Modality.WINDOW_MODAL);
     this.form_window.show();
     /*

@@ -35,7 +35,7 @@ public class PlantDemoSystem {
         LocalDate.now(),
         50,
         7300, 
-        GrowType.Grafting,
+        GrowType.GRAFTING,
         "Plant in full sun with well-drained, fertile soil. Ensure good air circulation to prevent disease",
         PlantType.TREE
       ),
@@ -50,7 +50,7 @@ public class PlantDemoSystem {
         LocalDate.now(),
         5,
         150, 
-        GrowType.Seeding, // Or Cutting
+        GrowType.SEEDING, // Or Cutting
         "Sow seeds indoors 6-8 weeks before the last frost. Transplant outdoors in full sun after the danger of frost has passed",
         PlantType.HERB
         ),
@@ -65,7 +65,7 @@ public class PlantDemoSystem {
         LocalDate.now(),
         15,
         1825, 
-        GrowType.Cutting,
+        GrowType.CUTTING,
         "Thrives in indirect sunlight. Can be grown in soil or water",
         PlantType.CREEPER
       ),

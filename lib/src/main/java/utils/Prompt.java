@@ -32,7 +32,7 @@ public class Prompt {
     do {
       System.out.print(prompt);
       input = reader.nextLine();
-    } while(!input.isEmpty() && pred.test(input));
+    } while(input.isEmpty() || !pred.test(input));
     return input;
   }
 
