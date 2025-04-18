@@ -46,6 +46,15 @@ public class PlantManager {
     p.info.price = plant_price;
     this.plants.set(plant_index, p);
   }
+
+  // Find index of plant in array
+  public int indexOf(final AbstractPlant search) {
+    for (int i = 0; i < this.plants.size(); i++)
+      if (this.plants.get(i) == search)
+        return i;
+      // if (this.plants.get(i).equals(search))
+    return -1;
+  }
   
   // Search for a plant according to type
   public List<AbstractPlant> search(final PlantType plant_type) {
@@ -221,7 +230,7 @@ public class PlantManager {
       final int lifespan = Integer.valueOf(tokens.get(5));
       final GrowType grow_method = GrowType.fromString(tokens.get(6));
       final String grow_instructions = tokens.get(7);
-      final PlantType plant_type = PlantType.valueOf(tokens.get(8).toUpperCase());
+      final PlantType plant_type = PlantType.fromString(tokens.get(8).toUpperCase());
 
       final PlantInfo plant_info = new PlantInfo(name, names, pot_time, pot_date,
           price, lifespan, grow_method,

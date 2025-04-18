@@ -3,7 +3,9 @@ package ui;
 import java.util.Arrays;
 import java.util.List;
 
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleListProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.ListChangeListener;
@@ -36,6 +38,8 @@ public class Editor {
   private ObservableList<PlantModel> plants;
 
   private ObjectProperty<AbstractPlant> plant;
+  private BooleanProperty plantSelected;
+
   // private SimpleListProperty<ObservableList<AbstractPlant>> data;
 
   // Widgets
@@ -92,9 +96,13 @@ public class Editor {
 
     this.plant = new SimpleObjectProperty<AbstractPlant>();
 
+    this.plantSelected = new SimpleBooleanProperty();
+    this.plantSelected.bind(this.plant.isNull());
+
     this.plant_finder = new PlantFinder();
     this.plant_finder.pm.bind(this.pm);
-    this.plant_finder.plant.bind(this.plant);
+    this.plant_finder.plant.bindBidirectional(this.plant);
+    // this.plant_finder.plant.bind(this.plant);
 
     // PlantManager test = this.pm.get();
     // System.out.println(test.getPlants().get(0).info.name);
@@ -253,6 +261,32 @@ public class Editor {
 
       setupDialog(this.form.asParent(), event, "Add a new plant");
     });
+
+    this.btn_del.setOnMouseClicked(event -> {
+      // if (this.plant.isNotNull().get()) {
+      // if (this.plantSelected.get()) {
+      // if (this.plantSelected.get()) {
+      if (this.plant.get() != null) {
+
+        // Get the index of the plant
+        int index = this.pm.get().indexOf(this.plant.get());
+
+        if (index < 0) {
+          System.out.println("No plants were found");
+          return;
+        }
+        // Delete the plant
+        this.pm.get().del(index);
+        System.out.println("Deleted plant: " + this.plant.get().info.name);
+        System.out.println("Plant List Size: " + this.pm.get().getPlants().size());
+
+        // Deselect the plant 
+        this.plant.set(null);
+
+        this.plant_finder.refresh();
+      }
+    });
+    
 
     this.btn_edit.setOnMouseClicked(event -> {
       // TODO: Assume we have a plant selected

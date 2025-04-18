@@ -96,22 +96,14 @@ public class PlantFinder {
 
     // Show results in list view
     this.btn_find.setOnMouseClicked((event) -> {
-      // Get Plant Type
-      final PlantType plant_type = PlantType.fromString(this.cb_plant_type.getSelectionModel().getSelectedItem());
-
-      // Filter results
-      List<AbstractPlant> results = this.pm.get().search(plant_type);
-
-      List<String> plants = results.stream().map(p -> p.info.name).toList();
-
-      // Show results in list view
-      this.lv_results.getItems().clear();
-      this.lv_results.getItems().addAll(plants);
+      this.search();
     });
 
     // Update our seleced plant
     this.lv_results.getSelectionModel().selectedIndexProperty().addListener((e, before, after) -> {
-      this.plant.set(this.pm.get().getPlants().get(after.intValue()));
+      // Select new plants only if they're valid choices
+      if (after.intValue() > -1)
+        this.plant.set(this.pm.get().getPlants().get(after.intValue()));
     });
 
     // Packing
@@ -124,7 +116,24 @@ public class PlantFinder {
         this.gp_options,
         this.btn_find,
         this.lv_results
-      );
+    );
+  }
+
+  // Internal
+  private void search() {
+    // Get Plant Type
+    final PlantType plant_type = PlantType.fromString(this.cb_plant_type.getSelectionModel().getSelectedItem());
+
+    // Filter results
+    List<AbstractPlant> results = this.pm.get().search(plant_type);
+
+    this.lv_results.getItems().clear();
+
+    // If there are any new results
+    if (results.size() > 0) {
+      List<String> plants = results.stream().map(p -> p.info.name).toList();
+      this.lv_results.getItems().addAll(plants);
+    }
   }
 
   // API
@@ -134,22 +143,17 @@ public class PlantFinder {
     if (on) {
       // Add the listener on the combo box
       this.cb_plant_type.getSelectionModel().selectedItemProperty().addListener((e, before, after) -> {
-        // Get Plant Type
-        final PlantType plant_type = PlantType.fromString(after);
-
-        // Filter results
-        List<AbstractPlant> results = this.pm.get().search(plant_type);
-
-        List<String> plants = results.stream().map(p -> p.info.name).toList();
-
-        // Show results in list view
-        this.lv_results.getItems().clear();
-        this.lv_results.getItems().addAll(plants);
+        this.search();
       });
     } else {
       // Remove listener on combo box
       this.cb_plant_type.getSelectionModel().selectedItemProperty().removeListener((e, before, after) -> {});
     }
+  }
+
+  // Refresh the results
+  public void refresh() {
+    this.search();
   }
 
   public Parent asParent() {
