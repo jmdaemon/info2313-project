@@ -31,6 +31,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.FileChooser.ExtensionFilter;
 import plant.AbstractPlant;
 import plant.PlantManager;
 
@@ -342,6 +343,7 @@ public class Editor {
         .toString();
       FileChooser fchooser = new FileChooser();
       fchooser.setTitle("Select PSV File");
+      fchooser.setSelectedExtensionFilter(new ExtensionFilter("Pipe Separated Value File", "psv"));
       fchooser.setInitialDirectory(new File(default_dir));
 
       Stage stage = new Stage();
@@ -360,6 +362,31 @@ public class Editor {
       }
     });
 
+    // EXPORT Plants
+    this.btn_save.setOnMouseClicked(event -> {
+
+      // Open file chooser to default plants.psv dir
+      String default_dir = Paths.get("")
+        .toAbsolutePath()
+        .toString();
+      FileChooser fchooser = new FileChooser();
+      fchooser.setTitle("Save plants to: ");
+      fchooser.setInitialFileName("plants.psv");
+      fchooser.setInitialDirectory(new File(default_dir));
+
+      Stage stage = new Stage();
+      File fp = fchooser.showSaveDialog(stage);
+      
+      // Write plants to disk
+      if (fp.exists()) {
+        System.out.println(fp.toString());
+        this.pm.get().write(fp.toString(), true);
+        System.out.println("Successfully exported plants to: " + fp.toString());
+      } else {
+        // Init plants file
+        this.pm.get().write(fp.toString(), false);
+      }
+    });
   }
 
   // private void setupDialog(Parent dialog, Event event, final String title) {

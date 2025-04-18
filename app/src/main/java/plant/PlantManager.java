@@ -180,13 +180,13 @@ public class PlantManager {
       "%s|%s|%s|%s|%s|%d|%s|%s|%s",
       plant.info.name,
       plant.info.alt_names,
-      plant.info.pot_time.toString(),
+      plant.info.pot_time.toString().toUpperCase(),
       plant.info.pot_date.toString(),
       plant.info.price,
       plant.info.lifespan,
-      plant.info.grow_method.toString(),
+      plant.info.grow_method.toString().toUpperCase(),
       plant.info.grow_instructions,
-      plant.info.plant_type
+      plant.info.plant_type.toString().toUpperCase()
     );
     
     switch(plant.info.plant_type) {
