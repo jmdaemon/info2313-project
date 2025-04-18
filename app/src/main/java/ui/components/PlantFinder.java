@@ -86,6 +86,7 @@ public class PlantFinder {
     // TODO: Create plant type combo box?
     this.cb_plant_type = new ComboBox<String>();
     this.cb_plant_type.setPromptText("Select a plant type.");
+    this.cb_plant_type.getItems().add("");
     this.cb_plant_type.getItems().addAll(
         Library.enumToLabels(Stream.of(PlantType.values()).map(s -> s.toString()).toList())
     );
@@ -142,9 +143,17 @@ public class PlantFinder {
   // Internal
   private void search() {
     // Get Plant Type
-    final PlantType plant_type = PlantType.fromString(this.cb_plant_type.getSelectionModel().getSelectedItem());
+    String input = this.cb_plant_type.getSelectionModel().getSelectedItem();
+
+    // Show all results by default
+    if (input == "") {
+      showAll();
+      return;
+    }
 
     // Filter results
+    final PlantType plant_type = PlantType.fromString(input);
+
     List<AbstractPlant> results = this.pm.get().search(plant_type);
 
     this.lv_results.getItems().clear();
@@ -155,7 +164,7 @@ public class PlantFinder {
       this.lv_results.getItems().addAll(plants);
     }
   }
-
+  
   // API
 
   // In-case we want to filter on types immediately
@@ -174,6 +183,14 @@ public class PlantFinder {
   // Refresh the results
   public void refresh() {
     this.search();
+  }
+
+  // Show available plants when none is selected
+  public void showAll() {
+    this.lv_results.getItems().clear();
+    List<AbstractPlant> results = this.pm.get().getPlants();
+    List<String> plants = results.stream().map(p -> p.info.name).toList();
+    this.lv_results.getItems().addAll(plants);
   }
 
   public Parent asParent() {

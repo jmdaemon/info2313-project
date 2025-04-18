@@ -104,6 +104,7 @@ public class Editor {
     this.plant_finder = new PlantFinder();
     this.plant_finder.pm.bind(this.pm);
     this.plant_finder.plant.bindBidirectional(this.plant);
+    this.plant_finder.showAll();
     // this.plant_finder.plant.bind(this.plant);
 
     // PlantManager test = this.pm.get();
