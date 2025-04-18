@@ -34,6 +34,8 @@ import plant.plants.Tree;
 
 import ui.Component;
 
+import utils.Library;
+
 public class PlantForm implements Component {
   private GridPane gp;
 
@@ -173,23 +175,24 @@ public class PlantForm implements Component {
     this.tf_price.setPromptText("e.g 50.0");
     this.tf_lifespan.setPromptText("e.g 7200");
 
-    this.cb_plant_type.setPromptText("Choose a plant type.");
+    // this.cb_plant_type.setPromptText("Choose a plant type.");
+    this.cb_plant_type.setPromptText("Select a plant type.");
 
     this.cb_plant_type.getItems().addAll(
         // "Tree", "Herb", "Creeper"
-        enumToLabels(Stream.of(PlantType.values()).map(s -> s.toString()).toList())
+        Library.enumToLabels(Stream.of(PlantType.values()).map(s -> s.toString()).toList())
     );
 
     this.cb_pot_season.setPromptText("Select the best season for planting.");
     this.cb_pot_season.getItems().addAll(
       // "Winter", "Spring", "Summer", "Fall"
-        enumToLabels(Stream.of(Season.values()).map(s -> s.toString()).toList())
+        Library.enumToLabels(Stream.of(Season.values()).map(s -> s.toString()).toList())
     );
 
     this.cb_grow_method.setPromptText("Select a method of growing");
     this.cb_grow_method.getItems().addAll(
       // "Seeding", "Cutting", "Layering", "Grafting", "Budding"
-        enumToLabels(Stream.of(GrowType.values()).map(s -> s.toString()).toList())
+        Library.enumToLabels(Stream.of(GrowType.values()).map(s -> s.toString()).toList())
     );
 
     this.dp_pot_date.setPromptText("Select the best date for planting.");
@@ -320,13 +323,5 @@ public class PlantForm implements Component {
   @Override
   public Parent asParent() {
     return this.gp;
-  }
-
-  public static List<String> enumToLabels(List<String> values) {
-    return values.stream().skip(1).map(s -> capitalize(s)).toList();
-  }
-
-  public static String capitalize(final String s) {
-    return s.substring(0, 1).toUpperCase() + s.substring(1);
   }
 }

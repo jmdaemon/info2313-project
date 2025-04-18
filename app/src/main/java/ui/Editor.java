@@ -25,24 +25,33 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import plant.AbstractPlant;
 import plant.PlantManager;
+
+import ui.components.PlantFinder;
 import ui.components.PlantForm;
 
 public class Editor {
   // Data
-  private PlantManager pm;
+  // private PlantManager pm;
+  private ObjectProperty<PlantManager> pm;
   private ObservableList<PlantModel> plants;
 
   private ObjectProperty<AbstractPlant> plant;
   // private SimpleListProperty<ObservableList<AbstractPlant>> data;
 
   // Widgets
+  private PlantFinder plant_finder;
 
   // Components
   private PlantForm form;
   private Stage form_window;
   private Scene form_dialog;
+
   // private class SearchPane {
   //   private GridPane gp;
+
+  // Widget: Search
+
+  
     
 
   // }
@@ -78,8 +87,20 @@ public class Editor {
   private VBox vb;
 
   public Editor() {
+    this.pm = new SimpleObjectProperty<PlantManager>();
+    this.pm.set(GUI.createPlantManagerFixture());
 
-    this.pm = GUI.createPlantManagerFixture();
+    this.plant = new SimpleObjectProperty<AbstractPlant>();
+
+    this.plant_finder = new PlantFinder();
+    this.plant_finder.pm.bind(this.pm);
+    this.plant_finder.plant.bind(this.plant);
+
+    // PlantManager test = this.pm.get();
+    // System.out.println(test.getPlants().get(0).info.name);
+    // this.plant_finder = new PlantFinder(this.pm, this.plant);
+
+    // this.pm = GUI.createPlantManagerFixture();
 
     // Button Bar
     this.btn_add = new Button("Add");
@@ -94,6 +115,7 @@ public class Editor {
     // Table View
     this.cb_plant = new ChoiceBox<String>();
     this.tbl_plant_info = new TableView<PlantModel>();
+    
 
     // Paragraph View
 
@@ -151,11 +173,14 @@ public class Editor {
     */
 
     // Table Items
-    for (AbstractPlant plant : this.pm.getPlants()) {
+    // for (AbstractPlant plant : this.pm.getPlants()) {
+    for (AbstractPlant plant : this.pm.get().getPlants()) {
       PlantModel model = new PlantModel(plant);
       this.cb_plant.getItems().add(plant.info.name);
       this.tbl_plant_info.getItems().add(model);
     }
+
+    this.pm.get();
 
     // this.plant_details.addAll(
         // new Label("Growing Method"),
@@ -185,7 +210,8 @@ public class Editor {
         this.btn_load,
         this.btn_save);
     
-    this.vb.getChildren().addAll(this.hb, this.cb_plant, this.tbl_plant_info);
+    // this.vb.getChildren().addAll(this.hb, this.cb_plant, this.tbl_plant_info);
+    this.vb.getChildren().addAll(this.hb, this.plant_finder.asParent());
     
     // Hook up Listeners
 
@@ -194,7 +220,8 @@ public class Editor {
       // Set labels
       final int selected = this.cb_plant.getSelectionModel().getSelectedIndex();
       
-      final AbstractPlant plant = this.pm.getPlants().get(selected);
+      // final AbstractPlant plant = this.pm.getPlants().get(selected);
+      final AbstractPlant plant = this.pm.get().getPlants().get(selected);
 
       // final int selectedIndex = this.cb_plant.getSelectionModel().getSelectedIndex();
       // final Object selectedItem = this.cb_plant.getSelectionModel().getSelectedItem();
@@ -206,8 +233,7 @@ public class Editor {
     // TableView
 
 
-    this.plant = new SimpleObjectProperty<AbstractPlant>();
-
+    
     setupListeners();
   }
   // Internal
@@ -221,7 +247,8 @@ public class Editor {
       this.plant.addListener((e) -> {
         AbstractPlant plant = this.plant.get();
         System.out.println(plant.info.name);
-        this.pm.add(plant);
+        // this.pm.add(plant);
+        this.pm.get().add(plant);
       });
 
       setupDialog(this.form.asParent(), event, "Add a new plant");
@@ -230,7 +257,8 @@ public class Editor {
     this.btn_edit.setOnMouseClicked(event -> {
       // TODO: Assume we have a plant selected
       // TODO: For now assume we just get the first plant
-      AbstractPlant plant = this.pm.getPlants().get(0);
+      // AbstractPlant plant = this.pm.getPlants().get(0);
+      AbstractPlant plant = this.pm.get().getPlants().get(0);
 
       
       // PlantForm form = new PlantForm(plant);
