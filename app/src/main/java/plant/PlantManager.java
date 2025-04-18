@@ -40,7 +40,12 @@ public class PlantManager {
     this.plants.remove(plant_index);
   }
 
-  // Update a single plant in the list
+  // Update a single plant 
+  public void updatePlant(final int plant_index, final AbstractPlant plant) {
+    this.plants.set(plant_index, plant);
+  }
+
+  // Update a single plant's price
   public void update(final int plant_index, final double plant_price) {
     AbstractPlant p = this.plants.get(plant_index);
     p.info.price = plant_price;

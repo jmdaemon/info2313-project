@@ -118,6 +118,10 @@ public class Editor {
     this.btn_save = new Button("Save");
     this.btn_back = new Button("Back");
 
+    // Disable buttons requiring selections
+    this.btn_del.setDisable(true);
+    this.btn_edit.setDisable(true);
+
     this.hb_info = new HBox();
 
     // Table View
@@ -248,10 +252,12 @@ public class Editor {
   // private void setupListeners(Scene root) {
   private void setupListeners() {
 
-    // Setup listener to add plants
+    // ADD Plants
     this.btn_add.setOnMouseClicked(event -> {
       this.form = new PlantForm();
       this.plant.bind(this.form.data);
+
+      // Watch for new plant form changes
       this.plant.addListener((e) -> {
         AbstractPlant plant = this.plant.get();
         System.out.println(plant.info.name);
@@ -262,10 +268,14 @@ public class Editor {
       setupDialog(this.form.asParent(), event, "Add a new plant");
     });
 
+    // Enable buttons
+    this.plant.addListener((obs, before, after) -> {
+      this.btn_del.setDisable(false);
+      this.btn_edit.setDisable(false);
+    });
+
+    // DELETE Plants
     this.btn_del.setOnMouseClicked(event -> {
-      // if (this.plant.isNotNull().get()) {
-      // if (this.plantSelected.get()) {
-      // if (this.plantSelected.get()) {
       if (this.plant.get() != null) {
 
         // Get the index of the plant
@@ -287,18 +297,31 @@ public class Editor {
       }
     });
     
-
+    // EDIT Plants
     this.btn_edit.setOnMouseClicked(event -> {
-      // TODO: Assume we have a plant selected
-      // TODO: For now assume we just get the first plant
-      // AbstractPlant plant = this.pm.getPlants().get(0);
-      AbstractPlant plant = this.pm.get().getPlants().get(0);
+      if (this.plant.get() != null) {
 
-      
-      // PlantForm form = new PlantForm(plant);
-      this.form = new PlantForm(plant);
-      // setupDialog(root, form.asParent(), event, "Edit an existing plant");
-      setupDialog(this.form.asParent(), event, "Edit an existing plant");
+        int index = this.pm.get().indexOf(this.plant.get());
+
+        if (index < 0) {
+          System.out.println("No plants were found");
+          return;
+        }
+
+        this.form = new PlantForm(this.plant.get());
+        this.plant.bind(this.form.data);
+
+        // Watch for new plant edits
+        this.plant.addListener((e) -> {
+          AbstractPlant plant = this.plant.get();
+          System.out.println(plant.info.name);
+          // this.pm.add(plant);
+          this.pm.get().updatePlant(index, plant);
+        });
+
+
+        setupDialog(this.form.asParent(), event, "Edit an existing plant");
+      }
     });
   }
 
