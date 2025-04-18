@@ -64,9 +64,11 @@ public class PlantFinder {
     this.vb.setPadding(new Insets(12));
 
     Font font = new Font(15);
+    Font h1 = new Font(24);
+    Font h2 = new Font(18);
 
     this.lbl_search = new Label("Search");
-    this.lbl_search.setFont(font);
+    this.lbl_search.setFont(h1);
     
     this.gp_options = new GridPane();
     // this.gp_options.setPadding(new Insets(12));
@@ -74,17 +76,19 @@ public class PlantFinder {
     this.gp_options.setHgap(12);
     
     this.cc1 = new ColumnConstraints(150);
-    this.cc1.setHalignment(HPos.CENTER);
+    // this.cc1.setHalignment(HPos.CENTER);
+    this.cc1.setHalignment(HPos.LEFT);
     this.cc2 = new ColumnConstraints(150);
     this.cc2.setHalignment(HPos.CENTER);
 
     this.gp_options.getColumnConstraints().addAll(this.cc1, this.cc2);
 
     this.lbl_options = new Label("Options");
-    this.lbl_options.setFont(font);
+    this.lbl_options.setFont(h2);
 
     // TODO: Create plant type combo box?
     this.cb_plant_type = new ComboBox<String>();
+    this.cb_plant_type.setPrefWidth(300);
     this.cb_plant_type.setPromptText("Select a plant type.");
     this.cb_plant_type.getItems().add("");
     this.cb_plant_type.getItems().addAll(
@@ -129,7 +133,9 @@ public class PlantFinder {
 
     // Packing
 
-    this.gp_options.add(this.lbl_options, 0, 0, 2, 1);
+    // this.gp_options.add(this.lbl_options, 0, 0, 2, 1);
+    // this.gp_options.add(this.cb_plant_type, 0, 1);
+    this.gp_options.add(this.lbl_options, 0, 0, 1, 1);
     this.gp_options.add(this.cb_plant_type, 0, 1);
 
     this.vb.getChildren().addAll(

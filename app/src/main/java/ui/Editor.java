@@ -24,6 +24,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -34,7 +35,7 @@ import javafx.stage.Stage;
 import javafx.stage.FileChooser.ExtensionFilter;
 import plant.AbstractPlant;
 import plant.PlantManager;
-
+import ui.components.PlantDetails;
 import ui.components.PlantFinder;
 import ui.components.PlantForm;
 
@@ -51,6 +52,7 @@ public class Editor {
 
   // Widgets
   private PlantFinder plant_finder;
+  private PlantDetails plant_details;
 
   // Components
   private PlantForm form;
@@ -85,7 +87,7 @@ public class Editor {
   private TableView<PlantModel> tbl_plant_info;
 
   // Paragraph View
-  private List<Label> plant_details;
+  // private List<Label> plant_details;
   /*
   private Label lbl_hdr_grow;
   private Label lbl_hdr_grow;
@@ -96,6 +98,7 @@ public class Editor {
   */
 
   private VBox vb;
+  private BorderPane bp;
 
   public Editor() {
     this.pm = new SimpleObjectProperty<PlantManager>();
@@ -110,6 +113,9 @@ public class Editor {
     this.plant_finder.pm.bind(this.pm);
     this.plant_finder.plant.bindBidirectional(this.plant);
     this.plant_finder.showAll();
+
+    this.plant_details = new PlantDetails();
+    this.plant_details.plant.bind(this.plant);
 
     // this.plant_finder.plant.bind(this.plant);
 
@@ -219,9 +225,12 @@ public class Editor {
     
     // Packing
     this.hb = new HBox();
+    this.hb.setSpacing(12);
+
     this.vb = new VBox();
     this.vb.setSpacing(12);
-    this.hb.setSpacing(12);
+
+    this.bp = new BorderPane();
 
     this.hb.getChildren().addAll(
         this.btn_back,
@@ -233,7 +242,15 @@ public class Editor {
         );
     
     // this.vb.getChildren().addAll(this.hb, this.cb_plant, this.tbl_plant_info);
-    this.vb.getChildren().addAll(this.hb, this.plant_finder.asParent());
+
+    // this.vb.getChildren().addAll(
+    //     this.hb,
+    //     this.plant_finder.asParent(),
+    //     this.plant_details.asParent()
+    //     );
+    this.bp.setTop(this.hb);
+    this.bp.setCenter(this.plant_details.asParent());
+    this.bp.setLeft(this.plant_finder.asParent());
     
     // Hook up Listeners
 
@@ -446,6 +463,7 @@ public class Editor {
   */
 
   public Parent asParent() {
-    return this.vb;
+    return this.bp;
+    // return this.vb;
   }
 }
