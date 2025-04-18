@@ -1,5 +1,7 @@
 package ui;
 
+import java.io.File;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 
@@ -24,7 +26,9 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import plant.AbstractPlant;
@@ -105,6 +109,7 @@ public class Editor {
     this.plant_finder.pm.bind(this.pm);
     this.plant_finder.plant.bindBidirectional(this.plant);
     this.plant_finder.showAll();
+
     // this.plant_finder.plant.bind(this.plant);
 
     // PlantManager test = this.pm.get();
@@ -117,8 +122,8 @@ public class Editor {
     this.btn_add = new Button("Add");
     this.btn_del = new Button("Delete");
     this.btn_edit = new Button("Edit");
-    this.btn_load = new Button("Load");
-    this.btn_save = new Button("Save");
+    this.btn_load = new Button("Import");
+    this.btn_save = new Button("Export");
     this.btn_back = new Button("Back");
 
     // Disable buttons requiring selections
@@ -219,11 +224,12 @@ public class Editor {
 
     this.hb.getChildren().addAll(
         this.btn_back,
+        this.btn_load,
+        this.btn_save,
         this.btn_add,
         this.btn_del,
-        this.btn_edit,
-        this.btn_load,
-        this.btn_save);
+        this.btn_edit
+        );
     
     // this.vb.getChildren().addAll(this.hb, this.cb_plant, this.tbl_plant_info);
     this.vb.getChildren().addAll(this.hb, this.plant_finder.asParent());
@@ -328,9 +334,34 @@ public class Editor {
       }
     });
 
+    // IMPORT Plants
+    this.btn_load.setOnMouseClicked(event -> {
+
+      String default_dir = Paths.get("")
+        .toAbsolutePath()
+        .toString();
+      FileChooser fchooser = new FileChooser();
+      fchooser.setTitle("Select PSV File");
+      fchooser.setInitialDirectory(new File(default_dir));
+
+      Stage stage = new Stage();
+      File fp = fchooser.showOpenDialog(stage);
+      
+      if (fp.exists()) {
+        System.out.println(fp.toString());
+        this.pm.get().read(fp.toString(), false);
+        
+        // Show the new loaded plants
+        this.plant_finder.showAll();
+        System.out.println("Successfully imported plants from: " + fp.toString());
+      } else {
+        // Init plants file
+        this.pm.get().read(fp.toString(), true);
+      }
+    });
+
   }
 
-  // private void setupDialog(Scene root, Parent dialog, Event event, final String title) {
   // private void setupDialog(Parent dialog, Event event, final String title) {
   private void setupDialog(Parent dialog, Event event, final String title) {
     // Stage stage = new Stage();
