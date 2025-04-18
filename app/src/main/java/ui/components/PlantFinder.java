@@ -11,8 +11,12 @@ import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.SelectionMode;
+import javafx.scene.control.TableRow;
+import javafx.scene.Node;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
@@ -104,6 +108,22 @@ public class PlantFinder {
       // Select new plants only if they're valid choices
       if (after.intValue() > -1)
         this.plant.set(this.pm.get().getPlants().get(after.intValue()));
+    });
+
+    // Deselect plants
+    this.vb.addEventFilter(MouseEvent.MOUSE_CLICKED, evt -> {
+
+      Node source = evt.getPickResult().getIntersectedNode();
+
+      // Search node hierarchy until ListCell or Scene Root found
+      while (source != null && !(source instanceof ListCell))
+        source = source.getParent();
+
+      // Clear selection on click anywhere but on a selected cell
+      if (source == null || (source instanceof ListCell && ((ListCell) source).isEmpty())) {
+        this.lv_results.getSelectionModel().clearSelection();
+        this.plant.set(null);
+      }
     });
 
     // Packing

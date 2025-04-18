@@ -17,9 +17,11 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -270,8 +272,9 @@ public class Editor {
 
     // Enable buttons
     this.plant.addListener((obs, before, after) -> {
-      this.btn_del.setDisable(false);
-      this.btn_edit.setDisable(false);
+      boolean enabled = (after == null);
+      this.btn_del.setDisable(enabled);
+      this.btn_edit.setDisable(enabled);
     });
 
     // DELETE Plants
@@ -323,6 +326,7 @@ public class Editor {
         setupDialog(this.form.asParent(), event, "Edit an existing plant");
       }
     });
+
   }
 
   // private void setupDialog(Scene root, Parent dialog, Event event, final String title) {
