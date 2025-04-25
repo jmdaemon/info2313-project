@@ -124,7 +124,7 @@ public class GUI extends Application {
     this.gallery.setNavigateEvent("btn-edit", this.scene, this.editor.asParent());
 
     // this.detail_view.setNavigateEvent("btn-back", this.scene, this.gallery.asParent());
-    this.editor.setNavigateEvent("btn-add", this.scene, this.gallery.asParent());
+    this.editor.setNavigateEvent("btn-back", this.scene, this.gallery.asParent());
 
     // Set resource on button widgets
     // this.detail_view.setResource(this.getClass().getResource(PLANT_PAGE_TMPL));
