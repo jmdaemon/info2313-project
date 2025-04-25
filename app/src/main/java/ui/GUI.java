@@ -17,6 +17,7 @@ import plant.Season;
 import plant.plants.Creeper;
 import plant.plants.Herb;
 import plant.plants.Tree;
+import ui.components.PlantItemPage;
 
 // Features
 
@@ -96,7 +97,7 @@ public class GUI extends Application {
 
   // Panels
   private Gallery gallery;
-  private ItemDetailsView detail_view;
+  // private PlantItemPage detail_view;
   private Editor editor;
 
   // private Scene root;
@@ -106,7 +107,7 @@ public class GUI extends Application {
   public void start(Stage stage) {
     // Create our different panels/windows
     this.gallery = new Gallery();
-    this.detail_view = new ItemDetailsView();
+    // this.detail_view = new PlantItemPage();
     this.editor = new Editor();
 
     // Scene scene = new Scene(this.gallery.asParent(), WIN_MIN_WIDTH, WIN_MIN_HEIGHT);
@@ -116,13 +117,17 @@ public class GUI extends Application {
 
     // Link the button widgets in each panel to switch the root
     // TODO: Update navigateEvent
-    this.gallery.setNavigateEvent("ol-plant-listing", this.scene, this.detail_view.asParent());
+    // this.gallery.setNavigateEvent("ol-plant-listing", this.scene, this.detail_view.asParent());
+
+    // this.gallery.setNavigateEvent("ol-plant-listing", this.scene, null);
+    this.gallery.setNavigateEvent("ol-plant-listing", this.scene, this.gallery.asParent());
     this.gallery.setNavigateEvent("btn-edit", this.scene, this.editor.asParent());
-    this.detail_view.setNavigateEvent("btn-back", this.scene, this.gallery.asParent());
+
+    // this.detail_view.setNavigateEvent("btn-back", this.scene, this.gallery.asParent());
     this.editor.setNavigateEvent("btn-add", this.scene, this.gallery.asParent());
 
     // Set resource on button widgets
-    this.detail_view.setResource(this.getClass().getResource(PLANT_PAGE_TMPL));
+    // this.detail_view.setResource(this.getClass().getResource(PLANT_PAGE_TMPL));
 
     // Show our scene
     stage.setScene(scene);
