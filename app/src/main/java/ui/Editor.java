@@ -29,6 +29,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -38,6 +39,7 @@ import plant.PlantManager;
 import ui.components.PlantDetails;
 import ui.components.PlantFinder;
 import ui.components.PlantForm;
+import ui.components.PlantTaskBar;
 
 public class Editor {
   // Data
@@ -46,37 +48,14 @@ public class Editor {
   private ObservableList<PlantModel> plants;
 
   private ObjectProperty<AbstractPlant> plant;
-  private BooleanProperty plantSelected;
-
   // private SimpleListProperty<ObservableList<AbstractPlant>> data;
 
   // Widgets
+  private PlantTaskBar plant_taskbar;
   private PlantFinder plant_finder;
   private PlantDetails plant_details;
 
   // Components
-  private PlantForm form;
-  private Stage form_window;
-  private Scene form_dialog;
-
-  // private class SearchPane {
-  //   private GridPane gp;
-
-  // Widget: Search
-
-  
-    
-
-  // }
-
-  // Button Bar
-  private HBox hb;
-  private Button btn_add;
-  private Button btn_del;
-  private Button btn_edit;
-  private Button btn_load;
-  private Button btn_save;
-  private Button btn_back;
 
   private List<Label> titles;
   private HBox hb_info;
@@ -106,8 +85,10 @@ public class Editor {
 
     this.plant = new SimpleObjectProperty<AbstractPlant>();
 
-    this.plantSelected = new SimpleBooleanProperty();
-    this.plantSelected.bind(this.plant.isNull());
+    // Task Bar
+    this.plant_taskbar = new PlantTaskBar();
+    this.plant_taskbar.setFont(new Font(15));
+
 
     this.plant_finder = new PlantFinder();
     this.plant_finder.pm.bind(this.pm);
@@ -125,17 +106,11 @@ public class Editor {
 
     // this.pm = GUI.createPlantManagerFixture();
 
-    // Button Bar
-    this.btn_add = new Button("Add");
-    this.btn_del = new Button("Delete");
-    this.btn_edit = new Button("Edit");
-    this.btn_load = new Button("Import");
-    this.btn_save = new Button("Export");
-    this.btn_back = new Button("Back");
-
+    // Task Bar
     // Disable buttons requiring selections
-    this.btn_del.setDisable(true);
-    this.btn_edit.setDisable(true);
+    this.plant_taskbar.btn_del.setDisable(true);
+    this.plant_taskbar.btn_edit.setDisable(true);
+
 
     this.hb_info = new HBox();
 
@@ -224,22 +199,22 @@ public class Editor {
     
     
     // Packing
-    this.hb = new HBox();
-    this.hb.setSpacing(12);
+    // this.hb = new HBox();
+    // this.hb.setSpacing(12);
 
     this.vb = new VBox();
     this.vb.setSpacing(12);
 
     this.bp = new BorderPane();
 
-    this.hb.getChildren().addAll(
-        this.btn_back,
-        this.btn_load,
-        this.btn_save,
-        this.btn_add,
-        this.btn_del,
-        this.btn_edit
-        );
+    // this.hb.getChildren().addAll(
+    //     this.btn_back,
+    //     this.btn_load,
+    //     this.btn_save,
+    //     this.btn_add,
+    //     this.btn_del,
+    //     this.btn_edit
+    //     );
     
     // this.vb.getChildren().addAll(this.hb, this.cb_plant, this.tbl_plant_info);
 
@@ -248,7 +223,8 @@ public class Editor {
     //     this.plant_finder.asParent(),
     //     this.plant_details.asParent()
     //     );
-    this.bp.setTop(this.hb);
+    // this.bp.setTop(this.hb);
+    this.bp.setTop(this.plant_taskbar.asParent());
     this.bp.setCenter(this.plant_details.asParent());
     this.bp.setLeft(this.plant_finder.asParent());
     
@@ -280,30 +256,30 @@ public class Editor {
   private void setupListeners() {
 
     // ADD Plants
-    this.btn_add.setOnMouseClicked(event -> {
-      this.form = new PlantForm();
-      this.plant.bind(this.form.data);
+    this.plant_taskbar.btn_add.setOnMouseClicked(event -> {
+      PlantForm form = new PlantForm();
+      this.plant.bind(form.data);
 
       // Watch for new plant form changes
       this.plant.addListener((e) -> {
         AbstractPlant plant = this.plant.get();
         System.out.println(plant.info.name);
-        // this.pm.add(plant);
         this.pm.get().add(plant);
       });
 
-      setupDialog(this.form.asParent(), event, "Add a new plant");
+      Stage window = setupDialog(form.asParent(), event, "Add a new plant");
+      window.show();
     });
 
     // Enable buttons
     this.plant.addListener((obs, before, after) -> {
       boolean enabled = (after == null);
-      this.btn_del.setDisable(enabled);
-      this.btn_edit.setDisable(enabled);
+      this.plant_taskbar.btn_del.setDisable(enabled);
+      this.plant_taskbar.btn_edit.setDisable(enabled);
     });
 
     // DELETE Plants
-    this.btn_del.setOnMouseClicked(event -> {
+    this.plant_taskbar.btn_del.setOnMouseClicked(event -> {
       if (this.plant.get() != null) {
 
         // Get the index of the plant
@@ -326,7 +302,7 @@ public class Editor {
     });
     
     // EDIT Plants
-    this.btn_edit.setOnMouseClicked(event -> {
+    this.plant_taskbar.btn_edit.setOnMouseClicked(event -> {
       if (this.plant.get() != null) {
 
         int index = this.pm.get().indexOf(this.plant.get());
@@ -336,24 +312,23 @@ public class Editor {
           return;
         }
 
-        this.form = new PlantForm(this.plant.get());
-        this.plant.bind(this.form.data);
+        PlantForm form = new PlantForm(this.plant.get());
+        this.plant.bind(form.data);
 
         // Watch for new plant edits
         this.plant.addListener((e) -> {
           AbstractPlant plant = this.plant.get();
           System.out.println(plant.info.name);
-          // this.pm.add(plant);
           this.pm.get().updatePlant(index, plant);
         });
 
-
-        setupDialog(this.form.asParent(), event, "Edit an existing plant");
+        Stage window = setupDialog(form.asParent(), event, "Edit an existing plant");
+        window.show();
       }
     });
 
     // IMPORT Plants
-    this.btn_load.setOnMouseClicked(event -> {
+    this.plant_taskbar.btn_load.setOnMouseClicked(event -> {
 
       String default_dir = Paths.get("")
         .toAbsolutePath()
@@ -380,7 +355,7 @@ public class Editor {
     });
 
     // EXPORT Plants
-    this.btn_save.setOnMouseClicked(event -> {
+    this.plant_taskbar.btn_save.setOnMouseClicked(event -> {
 
       // Open file chooser to default plants.psv dir
       String default_dir = Paths.get("")
@@ -406,36 +381,16 @@ public class Editor {
     });
   }
 
-  // private void setupDialog(Parent dialog, Event event, final String title) {
-  private void setupDialog(Parent dialog, Event event, final String title) {
-    // Stage stage = new Stage();
-
-    // Scene root = new Scene(dialog);
-    // root.setRoot(this.asParent());
-
-    // Scene root = new Scene(dialog);
-    // stage.setScene(root);
-    // stage.initOwner(((Node) event.getSource()).getScene().getWindow());
-    // stage.initOwner(((Node) event.getSource()).getScene().getWindow());
-    // stage.setScene(new Scene(dialog));
-    // stage.initOwner(root);
-    this.form_dialog = new Scene(dialog);
-    this.form_window = new Stage();
-    this.form_window.setScene(this.form_dialog);
-    // this.form_window.setTitle("Edit an existing plant");
-    this.form_window.setTitle(title);
-    this.form_window.initModality(Modality.WINDOW_MODAL);
-    this.form_window.show();
-    /*
-    Stage stage = 
-    stage.setScene(new Scene(dialog));
-    stage.setTitle("Edit an existing plant");
-    stage.initModality(Modality.WINDOW_MODAL);
-    stage.showAndWait();
-    */
-    // stage.show();
+  /** Set up a dialog window with a title */
+  private Stage setupDialog(Parent dialog, Event event, final String title) {
+    Scene scene = new Scene(dialog);
+    Stage window = new Stage();
+    
+    window.setScene(scene);
+    window.setTitle(title);
+    window.initModality(Modality.WINDOW_MODAL);
+    return window;
   }
-
 
   // API
 
@@ -443,7 +398,7 @@ public class Editor {
   public void setNavigateEvent(final String elem, Scene root, Parent next) {
     switch(elem) {
       case "btn-back" -> {
-        this.btn_back.setOnMouseClicked(_event -> {
+        this.plant_taskbar.btn_back.setOnMouseClicked(_event -> {
           root.setRoot(next);
         });
       }
@@ -451,16 +406,6 @@ public class Editor {
       // }
     }
   }
-
-  /*
-  public void setDialog(final String elem, Scene root) {
-    switch(elem) {
-      case "btn-add", "btn-edit" -> {
-        setupListeners();
-      }
-    }
-  }
-  */
 
   public Parent asParent() {
     return this.bp;
