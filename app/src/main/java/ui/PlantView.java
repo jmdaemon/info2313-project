@@ -1,5 +1,7 @@
 package ui;
 
+import java.net.URL;
+
 import javafx.geometry.Orientation;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -55,8 +57,21 @@ public class PlantView {
     this.lbl_plant_price.textProperty().bind(this.model.price.asString());
     this.iv.imageProperty().bindBidirectional(this.model.picture); 
 
+    // ImageView iv = new ImageView(PLANT_DEFAULT_IMG);
     // this.getClass().getResource(PLANT_DEFAULT_IMG)
     // this.iv.setImage(new Image());
+
+    this.iv.setImage(new Image(PLANT_DEFAULT_IMG, 200, 200, true, false));
+
+    // URL url = this.getClass().getResource("plant.png");
+    // ImageView iv = new ImageView(url.toExternalForm());
+    // this.iv.setImage(iv);
+
+    // URL url = this.getClass().getResource(PLANT_DEFAULT_IMG);
+    
+    // String path = "file://" + url.getPath();
+    // System.out.println(path);
+    // this.iv = new ImageView(path);
 
     vb.setPrefWidth(100);
     vb.setPrefHeight(200);
@@ -78,6 +93,12 @@ public class PlantView {
     this.btn_plant_view.setOnMouseClicked(_event -> {
       root.setRoot(next);
     });
+  }
+
+  // @Override
+  public void setResource(final URL url) {
+    String path = "file://" + url.getPath();
+    this.iv.setImage(new Image(path));
   }
 
   // API

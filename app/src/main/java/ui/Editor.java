@@ -82,7 +82,6 @@ public class Editor {
     this.plant_taskbar.btn_edit.setDisable(true);
 
     // Packing
-
     this.hb_left = new HBox();
     this.sep_left = new Separator(Orientation.VERTICAL);
 
