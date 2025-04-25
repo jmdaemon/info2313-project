@@ -13,6 +13,7 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.event.Event;
+import javafx.geometry.Orientation;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -20,6 +21,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
+import javafx.scene.control.Separator;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -39,6 +41,7 @@ import plant.PlantManager;
 import ui.components.PlantDetails;
 import ui.components.PlantFinder;
 import ui.components.PlantForm;
+import ui.components.PlantStatusBar;
 import ui.components.PlantTaskBar;
 
 public class Editor {
@@ -52,10 +55,15 @@ public class Editor {
 
   // Widgets
   private PlantTaskBar plant_taskbar;
+  private PlantStatusBar plant_statusbar;
   private PlantFinder plant_finder;
   private PlantDetails plant_details;
 
   // Components
+  private HBox hb_left;
+
+  private Separator sep_left;
+  private Separator sep_center;
 
   private List<Label> titles;
   private HBox hb_info;
@@ -89,6 +97,8 @@ public class Editor {
     this.plant_taskbar = new PlantTaskBar();
     this.plant_taskbar.setFont(new Font(15));
 
+    this.plant_statusbar = new PlantStatusBar();
+    this.plant_statusbar.setFont(new Font(15));
 
     this.plant_finder = new PlantFinder();
     this.plant_finder.pm.bind(this.pm);
@@ -111,6 +121,8 @@ public class Editor {
     this.plant_taskbar.btn_del.setDisable(true);
     this.plant_taskbar.btn_edit.setDisable(true);
 
+    this.hb_left = new HBox();
+    this.sep_left = new Separator(Orientation.VERTICAL);
 
     this.hb_info = new HBox();
 
@@ -224,9 +236,19 @@ public class Editor {
     //     this.plant_details.asParent()
     //     );
     // this.bp.setTop(this.hb);
+
+    this.hb_left.getChildren().addAll(
+        this.plant_finder.asParent(),
+        this.sep_left
+    );
+
     this.bp.setTop(this.plant_taskbar.asParent());
     this.bp.setCenter(this.plant_details.asParent());
-    this.bp.setLeft(this.plant_finder.asParent());
+
+    // this.bp.setLeft(this.plant_finder.asParent());
+
+    this.bp.setLeft(this.hb_left);
+    this.bp.setBottom(this.plant_statusbar.asParent());
     
     // Hook up Listeners
 
@@ -339,8 +361,11 @@ public class Editor {
         this.pm.get().read(fp.toString(), false);
         
         // Show the new loaded plants
+        final String status = "Successfully imported plants from: " + fp.toString();
+
+        System.out.println(status);
+        this.plant_statusbar.showStatus(status, 3000);
         this.plant_finder.showAll();
-        System.out.println("Successfully imported plants from: " + fp.toString());
       } else {
         // Init plants file
         this.pm.get().read(fp.toString(), true);
@@ -356,9 +381,10 @@ public class Editor {
       
       // Write plants to disk
       if (fp.exists()) {
-        System.out.println(fp.toString());
+        final String status = "Successfully exported plants to: " + fp.toString();
+        System.out.println(status);
+        this.plant_statusbar.showStatus(status, 3000);
         this.pm.get().write(fp.toString(), true);
-        System.out.println("Successfully exported plants to: " + fp.toString());
       } else {
         // Init plants file
         this.pm.get().write(fp.toString(), false);
@@ -366,6 +392,7 @@ public class Editor {
     });
   }
 
+  /** Set up a file chooser to save or load files */
   private FileChooser setupFileChooser(final String type) {
     // Open file chooser to default plants.psv dir
     String default_dir = Paths.get("").toAbsolutePath().toString();

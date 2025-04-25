@@ -3,16 +3,24 @@ package ui.components;
 import java.util.ArrayList;
 import java.util.List;
 
+import javafx.beans.property.ObjectProperty;
+import javafx.event.Event;
 import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Separator;
 import javafx.scene.control.ToolBar;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.text.Font;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import plant.AbstractPlant;
+import plant.PlantManager;
 
 public class PlantTaskBar {
+
   private HBox hb;
   private ToolBar tb;
   public Separator sep;
@@ -27,6 +35,7 @@ public class PlantTaskBar {
   public List<Button> all_btns;
 
   public PlantTaskBar() {
+    // Controls
     this.tb = new ToolBar();
 
     this.hb = new HBox();
@@ -52,6 +61,9 @@ public class PlantTaskBar {
         btn_edit
     ));
 
+    // Listeners
+
+    // Packing
     this.tb.getItems().addAll(
         this.btn_back, this.sep,
         this.btn_load, 
@@ -61,9 +73,10 @@ public class PlantTaskBar {
         this.btn_edit
     );
 
-    // Packing
     this.hb.getChildren().addAll(this.tb);
   }
+
+  // Internal
 
   // API
 
