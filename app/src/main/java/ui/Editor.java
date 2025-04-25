@@ -330,14 +330,7 @@ public class Editor {
     // IMPORT Plants
     this.plant_taskbar.btn_load.setOnMouseClicked(event -> {
 
-      String default_dir = Paths.get("")
-        .toAbsolutePath()
-        .toString();
-      FileChooser fchooser = new FileChooser();
-      fchooser.setTitle("Select PSV File");
-      fchooser.setSelectedExtensionFilter(new ExtensionFilter("Pipe Separated Value File", "psv"));
-      fchooser.setInitialDirectory(new File(default_dir));
-
+      FileChooser fchooser = setupFileChooser("IMPORT"); 
       Stage stage = new Stage();
       File fp = fchooser.showOpenDialog(stage);
       
@@ -357,15 +350,7 @@ public class Editor {
     // EXPORT Plants
     this.plant_taskbar.btn_save.setOnMouseClicked(event -> {
 
-      // Open file chooser to default plants.psv dir
-      String default_dir = Paths.get("")
-        .toAbsolutePath()
-        .toString();
-      FileChooser fchooser = new FileChooser();
-      fchooser.setTitle("Save plants to: ");
-      fchooser.setInitialFileName("plants.psv");
-      fchooser.setInitialDirectory(new File(default_dir));
-
+      FileChooser fchooser = setupFileChooser("EXPORT");
       Stage stage = new Stage();
       File fp = fchooser.showSaveDialog(stage);
       
@@ -379,6 +364,27 @@ public class Editor {
         this.pm.get().write(fp.toString(), false);
       }
     });
+  }
+
+  private FileChooser setupFileChooser(final String type) {
+    // Open file chooser to default plants.psv dir
+    String default_dir = Paths.get("").toAbsolutePath().toString();
+    FileChooser fchooser = new FileChooser();
+    fchooser.setInitialDirectory(new File(default_dir));
+    switch(type) {
+      case "EXPORT" -> {
+        fchooser.setTitle("Save plants to: ");
+        fchooser.setInitialFileName("plants.psv");
+      }
+      case "IMPORT" -> {
+        fchooser.setTitle("Select PSV File");
+        fchooser.setSelectedExtensionFilter(new ExtensionFilter("Pipe Separated Value File", "psv"));
+      }
+      default -> {
+        System.out.println("WARNING: No valid chooser type selected. Default file chooser will be used.");
+      }
+    }
+    return fchooser;
   }
 
   /** Set up a dialog window with a title */
