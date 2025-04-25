@@ -21,4 +21,5 @@ public class Herb extends AbstractPlant {
   @Override public String staking() {
     return "Not required";
   }
+  
 }

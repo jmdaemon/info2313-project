@@ -1,33 +1,24 @@
 package plant;
 
 public enum GrowType {
-  None("none"),
-  Seeding("seeding"),
-  Cutting("cutting"),
-  Division("division"),
-  Layering("layering"),
-  Grafting("grafting"),
-  Budding("budding");
-  /*
-  Seeding("Seeding"),
-  Cutting("Cutting"),
-  Division("Division"),
-  Layering("Layering"),
-  Grafting("Grafting"),
-  Budding("Budding");
-  */
+  NONE("none"),
+  SEEDING("seeding"),
+  CUTTING("cutting"),
+  DIVISION("division"),
+  LAYERING("layering"),
+  GRAFTING("grafting"),
+  BUDDING("budding");
 
   String value;
   GrowType(String value) { this.value = value; }
 
-  public static GrowType toGrowType(String grow_method) {
-    switch(grow_method) {
-      case "seeding" -> { return Seeding; }
-      case "cutting" -> { return Division; }
-      case "layering" -> { return Layering; }
-      case "grafting" -> { return Grafting; }
-      case "budding" -> { return Budding; }
-    }
-    return None;
+  @Override
+  public String toString() { return this.value; }
+
+  public static GrowType fromString(String text) {
+    for (GrowType e : GrowType.values()) 
+      if (e.toString().equalsIgnoreCase(text)) 
+        return e;
+    return null;
   }
 }

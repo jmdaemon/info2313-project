@@ -8,15 +8,14 @@ public enum PlantType {
 
   String value;
   PlantType(String value) { this.value = value; }
-  
-  // @Override
-  // public String toString() {
-  //   switch(this) {
-  //     case NONE: return "none";
-  //     case TREE: return "tree";
-  //     case HERB: return "herb";
-  //     case CREEPER: return "creeper";
-  //     default: throw new IllegalArgumentException();
-  //   }
-  // }
+
+  @Override
+  public String toString() { return this.value; }
+
+  public static PlantType fromString(String text) {
+    for (PlantType e : PlantType.values()) 
+      if (e.toString().equalsIgnoreCase(text)) 
+        return e;
+    return null;
+  }
 }

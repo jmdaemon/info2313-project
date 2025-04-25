@@ -29,9 +29,10 @@ public class ConsoleApp {
     String names = Prompt.promptLine("Other Names: ", reader);
 
     // Prompt Choices
-    Season season = Season.toSeason(Prompt.promptChoiceUnchecked("Potting Season: ", reader, indent,
-        s -> Season.toSeason(s.toUpperCase()) != Season.NONE));
-
+    String input = Prompt.promptChoiceUnchecked("Potting Season: ", reader, indent,
+        s -> Season.fromString(s) != Season.NONE);
+    Season season = Season.fromString(input);
+    
     // Try to parse a date
     String maybe_pot_date = null;
     while(true) {
@@ -48,9 +49,11 @@ public class ConsoleApp {
     int lifespan = Prompt.promptInt("Lifespan: ", reader);
 
     reader.nextLine(); // Skip line
-    GrowType grow_method = GrowType.toGrowType(Prompt.promptChoiceUnchecked("Grow Method: ", reader, indent,
-          gt -> GrowType.toGrowType(gt.toUpperCase()) != GrowType.None));
 
+    input = Prompt.promptChoiceUnchecked("Grow Method: ", reader, indent,
+          gt -> GrowType.fromString(gt) != GrowType.NONE);
+    GrowType grow_method = GrowType.fromString(input);
+    
     String grow_instructions = Prompt.promptMultiLine("Special Growing Instructions: ", "END", reader);
 
     // Get Plant Type
