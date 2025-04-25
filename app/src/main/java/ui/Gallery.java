@@ -1,8 +1,5 @@
 package ui;
 
-import java.util.List;
-import java.util.ArrayList;
-
 import javafx.beans.property.ObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -10,23 +7,23 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ToolBar;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import plant.AbstractPlant;
 import plant.PlantManager;
 
-import ui.interfaces.Navigator;
+import ui.components.PlantItemListing;
 import ui.interfaces.Component;
+import ui.interfaces.Navigator;
 
-public class Gallery implements Component, ui.interfaces.Navigator {
+public class Gallery implements Component, Navigator {
   final static String ERR_NAV_ELEM_NOT_FOUND = "Error: Navigator element not found.";
   
   // Properties
   // TODO: Update alongside changes in Editor
   private ObjectProperty<PlantManager> pm;
-  private ObservableList<PlantView> ol_plants;
+  private ObservableList<PlantItemListing> ol_plants;
 
   // Widgets
   private VBox vb;
@@ -69,7 +66,7 @@ public class Gallery implements Component, ui.interfaces.Navigator {
     for (AbstractPlant plant : pm.getPlants()) {
       // Setup plant controllers
       PlantModel model = new PlantModel(plant);
-      PlantView listing = new PlantView(model);
+      PlantItemListing listing = new PlantItemListing(model);
 
       // Add to our tile pane
       ol_plants.add(listing);
@@ -94,7 +91,7 @@ public class Gallery implements Component, ui.interfaces.Navigator {
   public void setNavigateEvent(final String elem, Scene root, Parent next) {
     switch(elem) {
       case "ol-plant-listing" -> {
-        for (PlantView listing: ol_plants) {
+        for (PlantItemListing listing: ol_plants) {
           listing.setNavigateEvent(root, next);
         }
       }
@@ -109,5 +106,4 @@ public class Gallery implements Component, ui.interfaces.Navigator {
 
   @Override
   public Parent asParent() { return this.vb; }
-  
 }

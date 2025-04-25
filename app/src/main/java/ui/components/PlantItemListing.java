@@ -1,4 +1,4 @@
-package ui;
+package ui.components;
 
 import java.net.URL;
 
@@ -16,7 +16,9 @@ import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Font;
 
-public class PlantView {
+import ui.PlantModel;
+
+public class PlantItemListing {
   final static String PLANT_DEFAULT_IMG = "plant.png";
   // Properties
   public StringProperty currency;
@@ -34,7 +36,7 @@ public class PlantView {
   private Label lbl_plant_price;
   private Button btn_plant_view;
 
-  public PlantView(final PlantModel model) {
+  public PlantItemListing(final PlantModel model) {
     // Data
     this.model = model;
 
