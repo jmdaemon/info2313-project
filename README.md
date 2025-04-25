@@ -31,3 +31,8 @@ To run the project in Eclipse, navigate to:
 double click a task (e.g `cli-app`).
 - After running a task, this will take you to the `Gradle Executions` tab.
 To view the output of the task, click on the console icon on the bottom right.
+
+## Features
+
+TODO:
+- Implement HTML Plant Page Viewer
