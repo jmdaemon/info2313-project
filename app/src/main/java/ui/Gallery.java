@@ -10,10 +10,12 @@ import javafx.scene.control.ToolBar;
 import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
+import javafx.stage.Stage;
 import plant.AbstractPlant;
 import plant.PlantManager;
 
 import ui.components.PlantItemListing;
+import ui.components.PlantItemPage;
 import ui.interfaces.Component;
 import ui.interfaces.Navigator;
 
@@ -23,7 +25,8 @@ public class Gallery implements Component, Navigator {
   // Properties
   // TODO: Update alongside changes in Editor
   private ObjectProperty<PlantManager> pm;
-  private ObservableList<PlantItemListing> ol_plants;
+  private ObservableList<PlantItemListing> ol_listings;
+  private ObservableList<PlantItemPage> ol_pages;
 
   // Widgets
   private VBox vb;
@@ -38,7 +41,9 @@ public class Gallery implements Component, Navigator {
     // Data
     // TODO: Create & pass this in main
     PlantManager pm = GUI.createPlantManagerFixture();
-    this.ol_plants = FXCollections.observableArrayList();
+
+    this.ol_listings = FXCollections.observableArrayList();
+    this.ol_pages = FXCollections.observableArrayList();
 
     // Controls
     this.tp = new TilePane();
@@ -53,29 +58,31 @@ public class Gallery implements Component, Navigator {
     this.btn_editor.setFont(font);
     this.btn_quit.setFont(font);
 
+    // Listeners
+
+    // Enable users to quit the window
+    this.btn_quit.setOnMouseClicked(_event -> {
+      Stage stage = (Stage) this.btn_quit.getScene().getWindow();
+      stage.close();
+    });
+
     // Packing
 
-
-
-    // this.hb = new HBox();
-    
-    // this.hb.getChildren().addAll(this.btn_editor);
-    // this.tp.getChildren().addAll(this.hb);
-
-    // Create Plant Gallery
     for (AbstractPlant plant : pm.getPlants()) {
-      // Setup plant controllers
       PlantModel model = new PlantModel(plant);
       PlantItemListing listing = new PlantItemListing(model);
+      PlantItemPage page = new PlantItemPage(model);
+      //
+      // page.setResource(this.getClass().getResource(PLANT_PAGE_TMPL));
 
-      // Add to our tile pane
-      ol_plants.add(listing);
-      // this.ol_plants.add(listing);
+      // For every listing, include a listener to change root
+      ol_listings.add(listing);
+      ol_pages.add(page);
       tp.getChildren().addAll(listing.asParent());
     }
     
     this.tb.getItems().addAll(
-        this.btn_quit,
+       this.btn_quit,
         this.btn_editor
     );
 
@@ -90,10 +97,19 @@ public class Gallery implements Component, Navigator {
   @Override
   public void setNavigateEvent(final String elem, Scene root, Parent next) {
     switch(elem) {
+      // Enable users to view plant pages
       case "ol-plant-listing" -> {
-        for (PlantItemListing listing: ol_plants) {
-          listing.setNavigateEvent(root, next);
-        }
+          for (int i = 0; i < this.ol_listings.size(); i++) {
+            PlantItemPage page = this.ol_pages.get(i);
+            PlantItemListing listing = this.ol_listings.get(i);
+
+            // Navigate to plant pages
+            listing.setNavigateEvent(root, page.asParent());
+            
+            // Navigate back to home gallery
+            page.setNavigateEvent("btn-back", root, next);
+            // page.setNavigateEvent("btn-back", root, );
+          }
       }
       case "btn-edit" -> {
         this.btn_editor.setOnMouseClicked(_event -> {

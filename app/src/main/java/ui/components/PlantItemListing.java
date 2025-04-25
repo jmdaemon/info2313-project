@@ -34,7 +34,7 @@ public class PlantItemListing {
   private ImageView iv; 
   private Label lbl_plant_name;
   private Label lbl_plant_price;
-  private Button btn_plant_view;
+  public Button btn_plant_view;
 
   public PlantItemListing(final PlantModel model) {
     // Data
