@@ -1,57 +1,85 @@
 package ui;
 
-import java.util.List;
-import java.util.ArrayList;
-
+import javafx.beans.property.ObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.layout.HBox;
+import javafx.scene.control.ToolBar;
 import javafx.scene.layout.TilePane;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
 import plant.AbstractPlant;
 import plant.PlantManager;
 
+import ui.components.PlantItemListing;
+import ui.interfaces.Component;
+import ui.interfaces.Navigator;
+
 public class Gallery implements Component, Navigator {
   final static String ERR_NAV_ELEM_NOT_FOUND = "Error: Navigator element not found.";
-  // MVC
-  private GalleryController controller;
+  
+  // Properties
+  // TODO: Update alongside changes in Editor
+  private ObjectProperty<PlantManager> pm;
+  private ObservableList<PlantItemListing> ol_plants;
 
   // Widgets
-  private ObservableList<PlantView> ol_plants;
-
-  private HBox hb;
-  private Button btn_editor;
-
+  private VBox vb;
   private TilePane tp;
 
-  public Gallery(final GalleryController controller) {
-    this.controller = controller;
+  private ToolBar tb;
+  private Button btn_editor;
+  private Button btn_quit;
 
-    this.ol_plants = FXCollections.observableArrayList();
 
-    this.tp = new TilePane();
-    this.hb = new HBox();
-    this.btn_editor = new Button("Editor");
-    
-    this.hb.getChildren().addAll(this.btn_editor);
-    this.tp.getChildren().addAll(this.hb);
-
-    // Create Plant Gallery
+  public Gallery() {
+    // Data
     // TODO: Create & pass this in main
     PlantManager pm = GUI.createPlantManagerFixture();
+    this.ol_plants = FXCollections.observableArrayList();
 
+    // Controls
+    this.tp = new TilePane();
+    this.vb = new VBox();
+    this.tb = new ToolBar();
+
+    this.btn_editor = new Button("Editor");
+    this.btn_quit = new Button("Quit");
+    
+    Font font = new Font(15);
+
+    this.btn_editor.setFont(font);
+    this.btn_quit.setFont(font);
+
+    // Packing
+
+
+
+    // this.hb = new HBox();
+    
+    // this.hb.getChildren().addAll(this.btn_editor);
+    // this.tp.getChildren().addAll(this.hb);
+
+    // Create Plant Gallery
     for (AbstractPlant plant : pm.getPlants()) {
       // Setup plant controllers
       PlantModel model = new PlantModel(plant);
-      PlantController control = new PlantController(model);
-      PlantView listing = new PlantView(control, model);
+      PlantItemListing listing = new PlantItemListing(model);
 
       // Add to our tile pane
-      this.ol_plants.add(listing);
+      ol_plants.add(listing);
+      // this.ol_plants.add(listing);
       tp.getChildren().addAll(listing.asParent());
     }
+    
+    this.tb.getItems().addAll(
+        this.btn_quit,
+        this.btn_editor
+    );
+
+    this.vb.getChildren().addAll(this.tb, this.tp);
   }
 
   // Internal
@@ -63,7 +91,7 @@ public class Gallery implements Component, Navigator {
   public void setNavigateEvent(final String elem, Scene root, Parent next) {
     switch(elem) {
       case "ol-plant-listing" -> {
-        for (PlantView listing: this.ol_plants) {
+        for (PlantItemListing listing: ol_plants) {
           listing.setNavigateEvent(root, next);
         }
       }
@@ -77,6 +105,5 @@ public class Gallery implements Component, Navigator {
   }
 
   @Override
-  public Parent asParent() { return this.tp; }
-  
+  public Parent asParent() { return this.vb; }
 }
