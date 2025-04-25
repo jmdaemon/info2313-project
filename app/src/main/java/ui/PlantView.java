@@ -2,87 +2,80 @@ package ui;
 
 import java.net.URL;
 
-import javafx.geometry.Orientation;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+import javafx.geometry.HPos;
+import javafx.geometry.Insets;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.Separator;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.ColumnConstraints;
+import javafx.scene.layout.GridPane;
+import javafx.scene.text.Font;
 
 public class PlantView {
   final static String PLANT_DEFAULT_IMG = "plant.png";
+  // Properties
+  public StringProperty currency;
 
   // Data
   private PlantModel model;
 
-  // Widgets
+  // Controls
+  private GridPane gp;
+  private ColumnConstraints cc1;
+  private ColumnConstraints cc2;
+
+  private ImageView iv; 
   private Label lbl_plant_name;
   private Label lbl_plant_price;
   private Button btn_plant_view;
-  private Separator sep_plant;
-  private ImageView iv; 
-
-  private HBox hb1;
-  private HBox hb2;
-  private VBox vb;
-  
 
   public PlantView(final PlantModel model) {
     // Data
     this.model = model;
 
-    // Widgets
-    this.lbl_plant_name = new Label("Plant Name");
-    this.lbl_plant_price = new Label("Plant Price");
+    // Controls
+    this.gp = new GridPane();
+    this.gp.setPadding(new Insets(12));
+    this.gp.setVgap(12); 
+    this.gp.setHgap(12);
+
+    this.cc1 = new ColumnConstraints(100);
+    this.cc1.setHalignment(HPos.LEFT);
+
+    this.cc2 = new ColumnConstraints(100);
+    this.cc2.setHalignment(HPos.RIGHT);
+    this.gp.getColumnConstraints().addAll(this.cc1, this.cc2);
+    
+    this.lbl_plant_name = new Label("Name");
+    this.lbl_plant_price = new Label("Price");
     this.btn_plant_view = new Button("View");
-    this.sep_plant = new Separator(Orientation.HORIZONTAL);
+    
+    Font font = new Font(15);
+    this.lbl_plant_name.setFont(font);
+    this.lbl_plant_price.setFont(font);
+    this.btn_plant_view.setFont(font);
+    
     this.iv = new ImageView();
-
-    // Containers
-    this.hb1 = new HBox();
-    this.hb2 = new HBox();
-    this.vb = new VBox();
-
-    // Properties
-
-    // TODO: Use FXML later to spruce up the look of the project
-
-    // Set dynamic binding on our plant info
-    this.lbl_plant_name.textProperty().bind(this.model.name);
-    this.lbl_plant_price.textProperty().bind(this.model.price.asString());
-    this.iv.imageProperty().bindBidirectional(this.model.picture); 
-
-    // ImageView iv = new ImageView(PLANT_DEFAULT_IMG);
-    // this.getClass().getResource(PLANT_DEFAULT_IMG)
-    // this.iv.setImage(new Image());
-
     this.iv.setImage(new Image(PLANT_DEFAULT_IMG, 200, 200, true, false));
 
-    // URL url = this.getClass().getResource("plant.png");
-    // ImageView iv = new ImageView(url.toExternalForm());
-    // this.iv.setImage(iv);
+    // Listeners
 
-    // URL url = this.getClass().getResource(PLANT_DEFAULT_IMG);
-    
-    // String path = "file://" + url.getPath();
-    // System.out.println(path);
-    // this.iv = new ImageView(path);
+    // Format gallery labels
+    this.currency = new SimpleStringProperty("$CAD ");
+    this.lbl_plant_name.textProperty().bind(this.model.name);
+    this.lbl_plant_price.textProperty().bind(this.currency.concat(this.model.price.asString()));
+    // this.iv.imageProperty().bindBidirectional(this.model.picture); 
 
-    vb.setPrefWidth(100);
-    vb.setPrefHeight(200);
-
-    // Layout Packing
-    hb1.getChildren().addAll(lbl_plant_name);
-    hb2.getChildren().addAll(lbl_plant_price, sep_plant, btn_plant_view);
-    vb.getChildren().addAll(
-        iv,
-        hb1,
-        hb2
-    );
+    // Packing
+    this.gp.add(this.iv, 0, 0, 2 ,1);
+    this.gp.add(this.lbl_plant_name, 0, 1, 1, 1);
+    this.gp.add(this.lbl_plant_price, 0, 2, 1, 1);
+    this.gp.add(this.btn_plant_view, 1, 2, 1, 1);
   }
 
   // Internal
@@ -102,6 +95,6 @@ public class PlantView {
 
   // API
   public Parent asParent() {
-    return this.vb;
+    return this.gp;
   }
 }
