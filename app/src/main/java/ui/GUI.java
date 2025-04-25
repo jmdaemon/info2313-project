@@ -105,7 +105,7 @@ public class GUI extends Application {
   @Override
   public void start(Stage stage) {
     // Create our different panels/windows
-    this.gallery = new Gallery(new GalleryController());
+    this.gallery = new Gallery();
     this.detail_view = new ItemDetailsView();
     this.editor = new Editor();
 

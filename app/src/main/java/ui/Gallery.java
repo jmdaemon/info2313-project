@@ -13,10 +13,11 @@ import javafx.scene.layout.TilePane;
 import plant.AbstractPlant;
 import plant.PlantManager;
 
-public class Gallery implements Component, Navigator {
+import ui.interfaces.Navigator;
+import ui.interfaces.Component;
+
+public class Gallery implements Component, ui.interfaces.Navigator {
   final static String ERR_NAV_ELEM_NOT_FOUND = "Error: Navigator element not found.";
-  // MVC
-  private GalleryController controller;
 
   // Widgets
   private ObservableList<PlantView> ol_plants;
@@ -26,8 +27,7 @@ public class Gallery implements Component, Navigator {
 
   private TilePane tp;
 
-  public Gallery(final GalleryController controller) {
-    this.controller = controller;
+  public Gallery() {
 
     this.ol_plants = FXCollections.observableArrayList();
 
@@ -45,8 +45,7 @@ public class Gallery implements Component, Navigator {
     for (AbstractPlant plant : pm.getPlants()) {
       // Setup plant controllers
       PlantModel model = new PlantModel(plant);
-      PlantController control = new PlantController(model);
-      PlantView listing = new PlantView(control, model);
+      PlantView listing = new PlantView(model);
 
       // Add to our tile pane
       this.ol_plants.add(listing);

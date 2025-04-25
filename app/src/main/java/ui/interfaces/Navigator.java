@@ -1,4 +1,4 @@
-package ui;
+package ui.interfaces;
 
 import javafx.scene.Parent;
 import javafx.scene.Scene;

@@ -13,7 +13,11 @@ import javafx.scene.layout.VBox;
 import javafx.scene.web.WebView;
 import netscape.javascript.JSObject;
 
-public class ItemDetailsView implements Component, Navigator, Resource  {
+import ui.interfaces.Component;
+import ui.interfaces.Navigator;
+import ui.interfaces.Resource;
+
+public class ItemDetailsView implements Component, Navigator, Resource {
   // DATA
   private PlantModel model;
   
@@ -44,7 +48,7 @@ public class ItemDetailsView implements Component, Navigator, Resource  {
         // Load our library
         if (after == Worker.State.SUCCEEDED) {
           JSObject jsobj = (JSObject) this.page.getEngine().executeScript("window");
-          jsobj.setMember("item_page", new ItemPage());
+          jsobj.setMember("item_page", new PlantFFI());
         }
     });
 

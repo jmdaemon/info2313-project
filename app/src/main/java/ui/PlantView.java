@@ -16,6 +16,9 @@ import javafx.scene.layout.VBox;
 public class PlantView {
   final static String PLANT_DEFAULT_IMG = "plant.png";
 
+  // Data
+  private PlantModel model;
+
   // Widgets
   private Label lbl_plant_name;
   private Label lbl_plant_price;
@@ -27,13 +30,9 @@ public class PlantView {
   private HBox hb2;
   private VBox vb;
   
-  // MVC
-  private PlantController controller;
-  private PlantModel model;
 
-  public PlantView(final PlantController controller, final PlantModel model) {
-    // MVC
-    this.controller = controller;
+  public PlantView(final PlantModel model) {
+    // Data
     this.model = model;
 
     // Widgets

@@ -32,7 +32,7 @@ import plant.plants.Creeper;
 import plant.plants.Herb;
 import plant.plants.Tree;
 
-import ui.Component;
+import ui.interfaces.Component;
 
 import utils.Library;
 
