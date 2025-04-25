@@ -2,42 +2,26 @@ package ui;
 
 import java.io.File;
 import java.nio.file.Paths;
-import java.util.Arrays;
-import java.util.List;
 
-import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleListProperty;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.collections.ListChangeListener;
-import javafx.collections.ObservableList;
 import javafx.event.Event;
 import javafx.geometry.Orientation;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListCell;
 import javafx.scene.control.Separator;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.FileChooser.ExtensionFilter;
+
 import plant.AbstractPlant;
 import plant.PlantManager;
+
 import ui.components.PlantDetails;
 import ui.components.PlantFinder;
 import ui.components.PlantForm;
@@ -45,13 +29,9 @@ import ui.components.PlantStatusBar;
 import ui.components.PlantTaskBar;
 
 public class Editor {
-  // Data
-  // private PlantManager pm;
+  // Properties
   private ObjectProperty<PlantManager> pm;
-  private ObservableList<PlantModel> plants;
-
   private ObjectProperty<AbstractPlant> plant;
-  // private SimpleListProperty<ObservableList<AbstractPlant>> data;
 
   // Widgets
   private PlantTaskBar plant_taskbar;
@@ -60,182 +40,57 @@ public class Editor {
   private PlantDetails plant_details;
 
   // Components
-  private HBox hb_left;
-
-  private Separator sep_left;
-  private Separator sep_center;
-
-  private List<Label> titles;
-  private HBox hb_info;
-
-  // Table View
-  private ChoiceBox<String> cb_plant;
-  private List<TableColumn<PlantModel, String>> tbl_cols;
-  private TableView<PlantModel> tbl_plant_info;
-
-  // Paragraph View
-  // private List<Label> plant_details;
-  /*
-  private Label lbl_hdr_grow;
-  private Label lbl_hdr_grow;
-  private Label lbl_hdr_fert;
-  private Label lbl_hdr_water;
-  private Label lbl_hdr_stake;
-  private Label lbl_hdr_prune;
-  */
-
-  private VBox vb;
   private BorderPane bp;
 
+  private Separator sep_left;
+
+  private HBox hb_left;
+  private VBox vb;
+
   public Editor() {
+
+    // Properties
     this.pm = new SimpleObjectProperty<PlantManager>();
+    this.plant = new SimpleObjectProperty<AbstractPlant>();
+
     this.pm.set(GUI.createPlantManagerFixture());
 
-    this.plant = new SimpleObjectProperty<AbstractPlant>();
+    // Components
 
     // Task Bar
     this.plant_taskbar = new PlantTaskBar();
     this.plant_taskbar.setFont(new Font(15));
 
+    // Status Bar
     this.plant_statusbar = new PlantStatusBar();
     this.plant_statusbar.setFont(new Font(15));
 
+    // Plant Finder
     this.plant_finder = new PlantFinder();
     this.plant_finder.pm.bind(this.pm);
     this.plant_finder.plant.bindBidirectional(this.plant);
     this.plant_finder.showAll();
 
+    // Plant Details
     this.plant_details = new PlantDetails();
     this.plant_details.plant.bind(this.plant);
 
-    // this.plant_finder.plant.bind(this.plant);
+    // Controls
 
-    // PlantManager test = this.pm.get();
-    // System.out.println(test.getPlants().get(0).info.name);
-    // this.plant_finder = new PlantFinder(this.pm, this.plant);
-
-    // this.pm = GUI.createPlantManagerFixture();
-
-    // Task Bar
     // Disable buttons requiring selections
     this.plant_taskbar.btn_del.setDisable(true);
     this.plant_taskbar.btn_edit.setDisable(true);
 
+    // Packing
+
     this.hb_left = new HBox();
     this.sep_left = new Separator(Orientation.VERTICAL);
 
-    this.hb_info = new HBox();
-
-    // Table View
-    this.cb_plant = new ChoiceBox<String>();
-    this.tbl_plant_info = new TableView<PlantModel>();
-    
-
-    // Paragraph View
-
-
-    
-    // Properties
-
-    // this.titles.addAll(List.of(
-    //     new Label("Growing Method"),
-    //     new Label("Growing Instructions"),
-    //     new Label("Fertilizing Method"),
-    //     new Label("Watering Method"),
-    //     new Label("Staking Method"),
-    //     new Label("Pruning Method")
-    // ));
-
-    // this.hb_info.getChildren().addAll(
-    // );
-
-    // this.hb_info.getChildren()
-    //   .addAll(new Label());
-    
-
-    // Table
-    this.tbl_plant_info.setPlaceholder(new Label("No plants available to display."));
-
-    // Table Columns
-    this.tbl_cols = Arrays.asList(
-        new TableColumn<>("Name"),
-        new TableColumn<>("Other Names"),
-        new TableColumn<>("Potting Time"),
-        new TableColumn<>("Potting Season"),
-        new TableColumn<>("Price ($CAD)"),
-        new TableColumn<>("Lifespan (Days)")
-        // new TableColumn<>("Lifespan (Days)"),
-        // TODO: We can move these to like a
-        // different ui element later if they are too big
-        /*
-        new TableColumn<>("Growing Method"),
-        new TableColumn<>("Growing Instructions"),
-        new TableColumn<>("Fertilizing Method"),
-        new TableColumn<>("Watering Method"),
-        new TableColumn<>("Staking Method"),
-        new TableColumn<>("Pruning Method")
-        */
-    );
-
-    // this.lbl_grow = new Label("Growing Method");
-
-    /*
-    for (TableColumn<PlantModel, String> col : this.tbl_cols) {
-      col.setCellValueFactory(new PropertyValueFactory<>("name"));
-      this.tbl_plant_info.getColumns().add(col);
-    }
-    */
-
-    // Table Items
-    // for (AbstractPlant plant : this.pm.getPlants()) {
-    for (AbstractPlant plant : this.pm.get().getPlants()) {
-      PlantModel model = new PlantModel(plant);
-      this.cb_plant.getItems().add(plant.info.name);
-      this.tbl_plant_info.getItems().add(model);
-    }
-
-    this.pm.get();
-
-    // this.plant_details.addAll(
-        // new Label("Growing Method"),
-        // new Label(plant.)
-        // );
-
-        // new TableColumn<>("Growing Method"),
-        // new TableColumn<>("Growing Instructions"),
-        // new TableColumn<>("Fertilizing Method"),
-        // new TableColumn<>("Watering Method"),
-        // new TableColumn<>("Staking Method"),
-        // new TableColumn<>("Pruning Method")
-    
-    
-    
-    // Packing
-    // this.hb = new HBox();
-    // this.hb.setSpacing(12);
 
     this.vb = new VBox();
     this.vb.setSpacing(12);
 
     this.bp = new BorderPane();
-
-    // this.hb.getChildren().addAll(
-    //     this.btn_back,
-    //     this.btn_load,
-    //     this.btn_save,
-    //     this.btn_add,
-    //     this.btn_del,
-    //     this.btn_edit
-    //     );
-    
-    // this.vb.getChildren().addAll(this.hb, this.cb_plant, this.tbl_plant_info);
-
-    // this.vb.getChildren().addAll(
-    //     this.hb,
-    //     this.plant_finder.asParent(),
-    //     this.plant_details.asParent()
-    //     );
-    // this.bp.setTop(this.hb);
 
     this.hb_left.getChildren().addAll(
         this.plant_finder.asParent(),
@@ -245,36 +100,14 @@ public class Editor {
     this.bp.setTop(this.plant_taskbar.asParent());
     this.bp.setCenter(this.plant_details.asParent());
 
-    // this.bp.setLeft(this.plant_finder.asParent());
-
     this.bp.setLeft(this.hb_left);
     this.bp.setBottom(this.plant_statusbar.asParent());
     
-    // Hook up Listeners
-
-    // Selection ChoiceBox
-    this.cb_plant.setOnAction((event) -> {
-      // Set labels
-      final int selected = this.cb_plant.getSelectionModel().getSelectedIndex();
-      
-      // final AbstractPlant plant = this.pm.getPlants().get(selected);
-      final AbstractPlant plant = this.pm.get().getPlants().get(selected);
-
-      // final int selectedIndex = this.cb_plant.getSelectionModel().getSelectedIndex();
-      // final Object selectedItem = this.cb_plant.getSelectionModel().getSelectedItem();
-
-      // System.out.println("Selection made: [" + selectedIndex + "] " + selectedItem);
-      // System.out.println("   ChoiceBox.getValue(): " + this.cb_plant.getValue());
-    });
-
-    // TableView
-
-
-    
+    // Listeners
     setupListeners();
   }
+
   // Internal
-  // private void setupListeners(Scene root) {
   private void setupListeners() {
 
     // ADD Plants
@@ -435,13 +268,10 @@ public class Editor {
           root.setRoot(next);
         });
       }
-      // case "btn-add", "btn-edit" -> {
-      // }
     }
   }
 
   public Parent asParent() {
     return this.bp;
-    // return this.vb;
   }
 }

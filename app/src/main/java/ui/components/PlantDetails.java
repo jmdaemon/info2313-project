@@ -42,7 +42,8 @@ public class PlantDetails {
   );
   private List<Label> lbl_plant_titles;
 
-  private HBox hb;
+  // private HBox hb;
+  private VBox vb_details;
   private GridPane gp_details;
 
   private VBox vb;
@@ -77,8 +78,6 @@ public class PlantDetails {
   public ObjectProperty<AbstractPlant> plant;
 
   // TODO:
-  // Add "Details" label
-  // Add "Instructions" label
   // Add Image of plant
   public PlantDetails() {
 
@@ -92,8 +91,8 @@ public class PlantDetails {
     this.lbl_plant_details = new ArrayList<Label>();
     // this.all_labels = new ArrayList<Label>();
 
-    this.hb = new HBox();
-    this.hb.setSpacing(12);
+    this.vb_details = new VBox();
+    this.vb_details.setSpacing(12);
 
     this.gp_details = new GridPane();
     this.gp_details.setPadding(new Insets(12, 12, 12, 12));
@@ -201,12 +200,12 @@ public class PlantDetails {
       );
     }
 
-    this.hb.getChildren().addAll(this.gp_details, this.vb);
+    this.vb_details.getChildren().addAll(this.gp_details, this.vb);
   }
 
   // API
 
   public Parent asParent() {
-    return this.hb;
+    return this.vb_details;
   }
 }
